@@ -1,10 +1,12 @@
-from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException, \
+    StaleElementReferenceException, ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
+import web_driver
 from handlers import ShopBreakException
 
 
@@ -20,10 +22,36 @@ def full_power_event_grind(driver):
         try:
             if driver.find_element_by_id("canvas"):
                 driver.find_element_by_id("canvas").click()
+
+        except NoSuchElementException:
+            try:
+                stage_info = driver.execute_script("return "
+                                                   "document"
+                                                   ".getElementsByClassName("
+                                                   "'stage_info_frame');")
+                if stage_info is not None:
+                    info_text = stage_info[0].text
+                    info_lines = info_text.splitlines()
+                    points_str = info_lines[2]
+                    points_int: int = points_str.split()[-1]
+
+                    web_driver.print_temp(f"points: {points_int}")
+
+                    if points_int >= 8000000:
+                        raise ShopBreakException
+            except Exception:
+                pass
+
+    if driver.page() == '/tower/tower_event_top':
+        try:
+            if driver.find_element_by_id("canvas"):
+                driver.find_element_by_id("canvas").click()
         except NoSuchElementException:
             pass
 
-        stage = driver.execute_script("return document.querySelector('#event_menu_2 > div:nth-child(3) > a');")
+        stage = driver.execute_script("return document.querySelector("
+                                      "'#event_menu_2 > div:nth-child(3) > "
+                                      "a');")
         driver.execute_script("arguments[0].click();", stage)
         WebDriverWait(driver, 3).until(ec.staleness_of(stage))
 
@@ -32,7 +60,8 @@ def full_power_event_grind(driver):
 
     if driver.page() == '/tower/tower_start':
         try:
-            WebDriverWait(driver, 2).until(ec.visibility_of_all_elements_located((By.ID, "modal-win")))
+            WebDriverWait(driver, 2).until(
+                ec.visibility_of_all_elements_located((By.ID, "modal-win")))
             utilities.use_stam(driver, tower_event=True)
         except TimeoutException:
             driver.click("class", "quest_dash_button")
@@ -55,6 +84,8 @@ def full_power_event_grind(driver):
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:
+            pass
+        except ElementClickInterceptedException:
             pass
 
     elif driver.page() == "/item/item_shop":

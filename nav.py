@@ -62,21 +62,26 @@ def main_page(driver, force_refresh=False):
 
 def slayer_event_page(driver):
     if driver.page() == "/mypage/index":
-        hunt = driver.execute_script("return document.querySelector('a[href*=hunt_event_top]');")
+        hunt = driver.execute_script(
+            "return document.querySelector('a[href*=hunt_event_top]');")
         driver.execute_script("arguments[0].click();", hunt)
 
-        WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located((By.CLASS_NAME, "hexagon_button")))
+        WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located(
+            (By.CLASS_NAME, "hexagon_button")))
 
 
 # Only for Slayer Events
 def battle_to_event_stage(driver):
-    WebDriverWait(driver, 5).until(ec.visibility_of_element_located((By.ID, "hunt_result")))
+    WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
+        (By.ID, "hunt_result")))
 
     try:
-        pts = driver.execute_script("return document.querySelector('#hunt_result > div > div:nth-child(5) > div > "
+        pts = driver.execute_script("return document.querySelector('#hunt_"
+                                    "result > div > div:nth-child(5) > div > "
                                     "div:nth-child(6)');").text
         pts = pts.split("\u3000")[-1]
         web_driver.print_temp(pts, False)
+
     except Exception:
         pass
 
@@ -84,9 +89,12 @@ def battle_to_event_stage(driver):
     close = result.find_element_by_class_name("closePopup")
     driver.execute_script("arguments[0].click();", close)
 
-    WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located((By.TAG_NAME, "a")))
+    WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located(
+        (By.TAG_NAME, "a")))
 
-    hunt = driver.execute_script("return document.querySelector('a[href*=hunt_start]');")
+    hunt = driver.execute_script(
+        "return document.querySelector('a[href*=hunt_start]');")
+
     driver.execute_script("arguments[0].click();", hunt)
     WebDriverWait(driver, 5).until(ec.staleness_of(hunt))
 
@@ -96,7 +104,8 @@ def battle_page(driver, slayer_event=False):
     if slayer_event or raid_boss_list(driver):
 
         try:
-            WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, "friend_frame")))
+            WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
+                (By.CLASS_NAME, "friend_frame")))
 
             friend_frames = driver.find_elements_by_class_name("friend_frame")
             ranking_frames = driver.find_elements_by_class_name("ranking_frame")
@@ -120,14 +129,6 @@ def battle_page(driver, slayer_event=False):
         return False
 
 
-# def is_quest_stage(driver):
-#     try:
-#         WebDriverWait(driver, 5).until(ec.visibility_of_element_located((By.ID, "canvas")))
-#         return True
-#     except TimeoutException:
-#         return False
-
-
 def quest_to_boss_list(driver, slayer_event=False):
     if slayer_event or driver.page() == "/quest/quest_start":
         cvs = driver.find_element_by_id("canvas")
@@ -141,17 +142,16 @@ def quest_to_boss_list(driver, slayer_event=False):
 def raid_boss_list(driver):
     if driver.page() == "/raid/raid_index":
         return True
-    else:
-        try:
-            main_page(driver)
-            driver.click("id", "boss_alerts_1")
-        except NoSuchElementException:
-            return False
+    elif driver.page() == "/card/card_max":
+        raise MaxCardLimitException
 
-        if driver.page() == "/card/card_max":
-            raise MaxCardLimitException
-        else:
-            return driver.page() == "/raid/raid_index"
+    try:
+        main_page(driver)
+        driver.click("id", "boss_alerts_1")
+    except NoSuchElementException:
+        return False
+
+    return driver.page() == "/raid/raid_index"
 
 
 def quest(driver):
@@ -212,7 +212,8 @@ def unclaimed_gifts(driver):
     main_page(driver)
 
     try:
-        WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.CLASS_NAME, "button-present")))
+        WebDriverWait(driver, 3).until(ec.visibility_of_element_located(
+            (By.CLASS_NAME, "button-present")))
         gifts_button = driver.find_element_by_class_name("button-present")
         icon_url = gifts_button.get_attribute('style').split('"')[1]
         return "present_2" in icon_url
@@ -227,8 +228,8 @@ def unclaimed_gifts(driver):
 
 
 def boss_recon(driver):
-    WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, "quest_boss_status_1")))
-    status = driver.find_elements_by_class_name("quest_boss_status_1")
+    status = WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
+        (By.CLASS_NAME, "quest_boss_status_1")))
     name = status[0].text
     if "(AR)" in name:
         web_driver.print_temp("fighting AR", False)
@@ -240,9 +241,10 @@ def boss_recon(driver):
 
 
 def defeat_retry(driver):
-    WebDriverWait(driver, 5).until(
-        ec.presence_of_all_elements_located((By.CLASS_NAME, "decision_button_column_1")))
-    buttons = driver.find_elements_by_class_name("decision_button_column_1")
+    buttons = WebDriverWait(driver, 5).until(
+        ec.presence_of_all_elements_located(
+            (By.CLASS_NAME, "decision_button_column_1")))
+
     for b in buttons:
         if "Retry" in b.text:
             driver.execute_script("arguments[0].click();", b)
