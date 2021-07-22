@@ -1,7 +1,9 @@
 import time
 
 import selenium.webdriver.support.expected_conditions as ec
-from selenium.common.exceptions import JavascriptException, TimeoutException, NoSuchElementException
+from selenium.common.exceptions import (JavascriptException,
+                                        TimeoutException,
+                                        NoSuchElementException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
