@@ -2,7 +2,9 @@ import time
 
 from selenium.common.exceptions import (
     TimeoutException,
-    JavascriptException, NoSuchElementException, WebDriverException,
+    JavascriptException,
+    NoSuchElementException,
+    WebDriverException,
     MoveTargetOutOfBoundsException)
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -27,11 +29,15 @@ def fight(driver, slayer_event=False):
 
     bp = 6 - driver.execute_script("return bpNumTillMax;")
     try:
-        name = WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.CLASS_NAME, "quest_boss_status_1")))
+        name = WebDriverWait(driver, 3).until(
+            ec.visibility_of_element_located((
+                By.CLASS_NAME, "quest_boss_status_1")))
         if "(AR)" in name.text:
             if bp < 3:
                 battle.full_attack(driver)
-                WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.ID, "modal-win-inner")))
+                WebDriverWait(driver, 3).until(
+                    ec.visibility_of_element_located((
+                        By.ID, "modal-win-inner")))
                 utilities.do_bp(driver, slayer_event)
                 battle.full_attack(driver)
             else:
@@ -42,7 +48,8 @@ def fight(driver, slayer_event=False):
         elif bp < 1:
         # if bp < 1:
             battle.weak_attack(driver)
-            WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.ID, "modal-win-inner")))
+            WebDriverWait(driver, 3).until(
+                ec.visibility_of_element_located((By.ID, "modal-win-inner")))
             utilities.do_bp(driver, slayer_event)
             battle.weak_attack(driver)
         else:
@@ -54,7 +61,8 @@ def fight(driver, slayer_event=False):
         pass
     except TimeoutException:
         try:
-            driver.find("css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
+            driver.find(
+                "css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
         except AttributeError:
             return
     except (WebDriverException, JavascriptException, AttributeError):
@@ -82,7 +90,8 @@ def skip_animation(driver):
     for i in range(35):
         try:
             ActionChains(driver).move_to_element_with_offset(
-                driver.find_element_by_id("gadget_contents"), 254, 50).click().perform()
+                driver.find_element_by_id(
+                    "gadget_contents"), 254, 50).click().perform()
 
             time.sleep(0.1)
 
@@ -91,7 +100,9 @@ def skip_animation(driver):
 
         except NoSuchElementException:
             pass
-        except (TimeoutException, AttributeError, MoveTargetOutOfBoundsException):
+        except (TimeoutException,
+                AttributeError,
+                MoveTargetOutOfBoundsException):
             web_driver.tb()
             web_driver.print_temp("skip animation: Timeout")
             break
