@@ -77,15 +77,13 @@ def weak_attack(driver):
 
 
 def skip_animation(driver):
-    while driver.page() != '/arena/user_result' or "/item/item_shop":
-        time.sleep(1)
+    if driver.page() != '/arena/user_result' or "/item/item_shop":
+        # time.sleep(1)
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element_by_id(
-                "gadget_contents"), 254, 50).click().perform()
-        time.sleep(1)
+            driver.find_element_by_id("gadget_contents"), 254, 50).click().perform()
+        # time.sleep(1)
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element_by_id(
-                "gadget_contents"), 700, 650).click().perform()
+            driver.find_element_by_id("gadget_contents"), 700, 650).click().perform()
 
 
 def get_battle_results(driver):
