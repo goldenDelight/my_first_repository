@@ -250,3 +250,9 @@ def defeat_retry(driver):
             driver.execute_script("arguments[0].click();", b)
             WebDriverWait(driver, 5).until(ec.staleness_of(b))
             break
+
+
+def arena(driver):
+    if driver.page() != "/arena/battle_index":
+        d = driver.execute_script("return document.querySelector('.top_menu_2');")
+        driver.execute_script("arguments[0].click();", d)

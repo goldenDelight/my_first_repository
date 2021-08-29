@@ -17,15 +17,23 @@ import utilities
 import web_driver
 
 
-def fight(driver, slayer_event=False):
+def fight(driver, slayer_event=False, arena_event=False):
     """
+    :param arena_event:
     :param driver:
     :param slayer_event:
     """
     import startup
 
+    if slayer_event or arena_event:
+        is_event = True
+    else:
+        is_event = False
+
     battle.start_battle(driver)
-    battle.get_partner(driver)
+
+    if not arena_event:
+        battle.get_partner(driver)
 
     bp = 6 - driver.execute_script("return bpNumTillMax;")
     try:
@@ -38,7 +46,7 @@ def fight(driver, slayer_event=False):
                 WebDriverWait(driver, 3).until(
                     ec.visibility_of_element_located((
                         By.ID, "modal-win-inner")))
-                utilities.do_bp(driver, slayer_event)
+                utilities.do_bp(driver, is_event)
                 battle.full_attack(driver)
             else:
                 battle.full_attack(driver)
@@ -46,11 +54,10 @@ def fight(driver, slayer_event=False):
             web_driver.print_temp("fully attacking", False)
 
         elif bp < 1:
-        # if bp < 1:
             battle.weak_attack(driver)
             WebDriverWait(driver, 3).until(
                 ec.visibility_of_element_located((By.ID, "modal-win-inner")))
-            utilities.do_bp(driver, slayer_event)
+            utilities.do_bp(driver, is_event)
             battle.weak_attack(driver)
         else:
             battle.weak_attack(driver)
@@ -69,6 +76,9 @@ def fight(driver, slayer_event=False):
         web_driver.tb()
 
     finally:
+        if arena_event:
+            import arena_grind
+            arena_grind.skip_animation(driver)
         if slayer_event:
             skip_animation(driver)
             if driver.page() == "/raid/boss_fail/":

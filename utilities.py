@@ -139,7 +139,7 @@ def use_stam(driver, tower_event=False):
     # WebDriverWait(driver, 5).until(ec.staleness_of(load_screen))
 
 
-def do_bp(driver, slayer_event):
+def do_bp(driver, is_event):
     try:
         pots = driver.execute_script('return document.querySelector('
                                      '\'#modal-win-inner > div > div > '
@@ -148,7 +148,7 @@ def do_bp(driver, slayer_event):
                                      'div:nth-child(1)\');')
         owned = int(pots.text.split()[-1])
         selector = Select(driver.find_element_by_class_name("selector"))
-        if not slayer_event:
+        if not is_event:
             selector.select_by_value("1")
             web_driver.print_temp(f"{owned-1} bp pots left")
         else:
@@ -158,6 +158,8 @@ def do_bp(driver, slayer_event):
         driver.click("class", "back_button_column_1")
     except JavascriptException:
         web_driver.tb()
+    except AttributeError:
+        pass
 
 
 def card_limit_popup(driver):
