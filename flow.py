@@ -26,9 +26,11 @@ def slayer_event(driver):
         print("switched to game frame\r")
 
     if driver.page() == "/raid/boss_achievement":
-        canvas = driver.execute_script("return document.querySelector('#canvas');")
-        canvas.click()
-
+        try:
+            canvas = driver.execute_script("return document.querySelector('#canvas');")
+            canvas.click()
+        except AttributeError:
+            pass
     try:
 
         if driver.page() == "/item/item_shop":

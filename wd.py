@@ -33,7 +33,11 @@ find_syntax_dic = {
 
 
 def page(driver):
-    return driver.execute_script("return location_url")
+    try:
+        return driver.execute_script("return location_url")
+    except JavascriptException:
+        driver.switch_to.parent_frame()
+        WebDriverWait(driver, 10).until(ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
 
 
 def bp_pot_tracker(driver, count):
