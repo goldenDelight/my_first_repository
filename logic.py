@@ -93,20 +93,18 @@ def fight(driver, slayer_event=False, arena_event=False):
 
 def skip_animation(driver):
     """
-    Skips do_battle cinematic. Loop of action-chain clicks at hardcoded coordinates of 'skip'
-    button hidden under canvas. The loop breaks if canvas returns as None, or after 3s.
+    Skips do_battle cinematic - all elements hidden under 'canvas'
+    A while loop of action-chain clicks at hardcoded coordinates of 'skip' button.
+    Won't throw exceptions, loop only breaks if detects location is the next
+    screen is or if 'canvas' element returns as None.
     """
 
-    for i in range(35):
+    while driver.page() == '/raid/boss_bp':
+        time.sleep(0.25)
         try:
             ActionChains(driver).move_to_element_with_offset(
                 driver.find_element_by_id(
                     "gadget_contents"), 254, 50).click().perform()
-
-            time.sleep(0.1)
-
-            if driver.find_element_by_id("hunt_result"):
-                break
 
         except NoSuchElementException:
             pass
