@@ -30,16 +30,28 @@ def pick_fight(driver):
     opponent_frames_list = WebDriverWait(driver, 10).until(
         ec.visibility_of_element_located((By.ID, "productList")))
 
-    opponent_frames_list = driver.execute_script(
-        "return document.querySelector('#productList');")
+    time.sleep(1)
+    print(driver.execute_script("return document.querySelector('#fev_timer');").text)
+
+    if driver.execute_script("return document.querySelector('#fev_timer');").text != "":
+        print('fever time yes')
+        is_fever_time = True
+    else:
+        is_fever_time = False
+        print('fever time no')
 
     opponent_frame = opponent_frames_list.find_elements_by_tag_name('a')[1]
+    # print(opponent_frame.text)
     driver.execute_script("arguments[0].click();", opponent_frame)
 
     try:
         WebDriverWait(driver, 10).until(ec.staleness_of(opponent_frames_list))
 
-        weak_attack(driver)
+        if is_fever_time:
+            weak_attack(driver)
+        else:
+            normal_attack(driver)
+
         skip_animation(driver)
         get_battle_results(driver)
     except TimeoutException:
@@ -67,6 +79,23 @@ def weak_attack(driver):
     driver.execute_script("arguments[0].click();", weak_attack_btn)
 
 
+def normal_attack(driver):
+    bp = 6 - driver.execute_script("return bpNumTillMax;")
+
+    if bp < 2:
+        normal_attack_btn = driver.execute_script(
+            "return document.querySelector('#quest_attack_2');")
+        driver.execute_script("arguments[0].click();", normal_attack_btn)
+
+        WebDriverWait(driver, 3).until(
+            ec.visibility_of_element_located((By.ID, "modal-win-inner")))
+        utilities.do_bp(driver, is_event=True)
+
+    normal_attack_btn = driver.execute_script(
+        "return document.querySelector('#quest_attack_2');")
+    driver.execute_script("arguments[0].click();", normal_attack_btn)
+
+
 def skip_animation(driver):
     while driver.page() == "/arena/user_confirm":
         time.sleep(1)
@@ -78,6 +107,7 @@ def skip_animation(driver):
 
 
 def get_battle_results(driver):
+    battle_loss = False
     points_frame = driver.execute_script(
         "return document.querySelector('#scroll_content2');")
     divs = points_frame.find_elements_by_tag_name('div')
@@ -96,14 +126,35 @@ def get_battle_results(driver):
             driver.set_arena_event_fight_count(count + 1)
 
             if pts < 1000:
+                battle_loss = True
+                me_atk = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_attack_frame_lose');")
+                me_atk = me_atk.text
+                time.sleep(0.5)
+
+                op_name = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(3)');")
+                op_name = op_name.text
+                time.sleep(0.5)
+
+                op_def = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_defence_frame_win');")
+                op_def = op_def.text
+
                 loss = driver.get_arena_event_loss_count()
                 driver.set_arena_event_loss_count(loss + 1)
+                time.sleep(0.5)
 
             average = ((total+pts)/(count+1))
 
-            web_driver.print_temp(f"arena_pts: {pts}", temp=False)
-            web_driver.print_temp(f"arena_pts_total: {driver.get_arena_event_points()}", temp=False)
-            web_driver.print_temp(f"arena_fight_count: {driver.get_arena_event_fight_count()}", temp=False)
-            web_driver.print_temp(f"arena_loss_count: {driver.get_arena_event_loss_count()}", temp=False)
-            web_driver.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
-            break
+            if battle_loss:
+                web_driver.print_temp(f"my atk: {me_atk}", temp=False)
+                web_driver.print_temp(f"op def: {op_def} ({op_name})", temp=False)
+                web_driver.print_temp(f"arena_fight_count: {driver.get_arena_event_fight_count()}", temp=False)
+                web_driver.print_temp(f"arena_loss_count: {driver.get_arena_event_loss_count()}", temp=False)
+                web_driver.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
+                break
+            else:
+                web_driver.print_temp(f"arena_pts: {pts}", temp=False)
+                web_driver.print_temp(f"arena_pts_total: {driver.get_arena_event_points()}", temp=False)
+                web_driver.print_temp(f"arena_fight_count: {driver.get_arena_event_fight_count()}", temp=False)
+                web_driver.print_temp(f"arena_loss_count: {driver.get_arena_event_loss_count()}", temp=False)
+                web_driver.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
+                break
