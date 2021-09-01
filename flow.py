@@ -243,20 +243,3 @@ def stall(driver, full_restore=True):
         raise RequestError0
 
     driver.done_stalling = status.current_bp(driver) == target_bp
-
-
-# Invoked if good boss_name and no initial_bp or cd is < 10min
-# def stall_for_bp(driver):
-#     import nav
-#     import status
-#
-#     starting_bp = status.current_bp(driver)
-#     cool_down = status.current_bp_cd(driver)
-#
-#     web_driver.print_temp(f"stalling {cool_down % 20} min for bp regen", False)
-#     time.sleep((60 * (cool_down % 20)) + 30)
-#
-#     while status.current_bp(driver) <= starting_bp:
-#         nav.main_page(driver)
-#         time.sleep(10)
-# driver.done_stalling = True
