@@ -107,7 +107,7 @@ def skip_animation(driver):
 
 
 def get_battle_results(driver):
-    battle_loss = False
+    battle_loss = ""
     points_frame = driver.execute_script(
         "return document.querySelector('#scroll_content2');")
     divs = points_frame.find_elements_by_tag_name('div')
@@ -126,22 +126,28 @@ def get_battle_results(driver):
             driver.set_arena_event_fight_count(count + 1)
 
             if pts < 1000:
-                battle_loss = True
-                me_atk = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_attack_frame_lose');")
-                me_atk = me_atk.text
-                time.sleep(0.5)
-
-                op_name = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(3)');")
-                op_name = op_name.text
-                time.sleep(0.5)
-
-                op_def = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_defence_frame_win');")
-                op_def = op_def.text
-
                 loss = driver.get_arena_event_loss_count()
                 driver.set_arena_event_loss_count(loss + 1)
-                time.sleep(0.5)
+                battle_loss = True
+                me_atk = "?"
+                op_name = "?"
+                op_def = "?"
 
+                try:
+                    me_atk = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_attack_frame_lose');")
+                    me_atk = me_atk.text
+                    time.sleep(0.5)
+
+                    op_name = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(3)');")
+                    op_name = op_name.text
+                    time.sleep(0.5)
+
+                    op_def = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_defence_frame_win');")
+                    op_def = op_def.text
+                    time.sleep(0.5)
+
+                except AttributeError:
+                    pass
             average = ((total+pts)/(count+1))
 
             if battle_loss:
