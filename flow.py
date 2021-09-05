@@ -17,13 +17,10 @@ from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def slayer_event(driver):
+    driver.switch_to.parent_frame()
+    WebDriverWait(driver, 10).until(
+            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
 
-    # driver.wait_for('id', 'page_title_text')
-    if driver.switch_to.parent_frame():
-        print("switched to parent frame\r")
-    if WebDriverWait(driver, 10).until(
-            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame"))):
-        print("switched to game frame\r")
 
     if driver.page() == "/raid/boss_achievement":
         try:
@@ -84,11 +81,9 @@ def slayer_event(driver):
     except TimeoutException:
         pass
     except JavascriptException:
-        if driver.switch_to.parent_frame():
-            web_driver.print_temp("switched to parent frame")
-        if WebDriverWait(driver, 10).until(
-                ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame"))):
-            web_driver.print_temp("switched to game frame")
+        driver.switch_to.parent_frame()
+        WebDriverWait(driver, 10).until(
+            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
 
 
 def check_slayer_boss(driver):
@@ -137,11 +132,9 @@ def grind_routine(driver):
     except MaxCardLimitException:
         utilities.sell_cards(driver)
     except JavascriptException:
-        if driver.switch_to.parent_frame():
-            web_driver.print_temp("switched to parent frame")
-        if WebDriverWait(driver, 10).until(
-                ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame"))):
-            web_driver.print_temp("switched to game frame")
+        driver.switch_to.parent_frame()
+        WebDriverWait(driver, 10).until(
+            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
 
 
 # decides: fight now, stall for assist, or stall for bp

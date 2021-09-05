@@ -71,13 +71,13 @@ def fight(driver, slayer_event=False):
     finally:
         if slayer_event:
             skip_animation(driver)
-            if driver.page() == "/raid/boss_fail/":
+            if driver.page() == '/raid/boss_fail/':
                 nav.defeat_retry(driver)
                 fight(driver, slayer_event)
         else:
-            driver.wait_for("id", "canvas_box")
-            driver.wait_for("id", "canvas")
-            driver.execute_script("gadgets.util.runOnLoadHandlers();")
+            driver.wait_for('id', "canvas_box")
+            driver.wait_for('id', "canvas")
+            driver.execute_script('gadgets.util.runOnLoadHandlers();')
             startup.game_start(driver)
 
 
@@ -86,17 +86,22 @@ def skip_animation(driver):
     Skips do_battle cinematic. Loop of action-chain clicks at hardcoded coordinates of 'skip'
     button hidden under canvas. The loop breaks if canvas returns as None, or after 3s.
     """
+    import json
+    stats = driver.execute_script("return app.boss.data")
 
-    for i in range(35):
+    print(f"\nplayer attack: {stats.get('player_attack')}\n"
+          f"player defense: {stats.get('player_defense')}\n"
+          f"player hp: {stats.get('player_hp')}\n"
+          f"  hp left: {stats.get('player_hp_last')}\n")
+
+    with open("battle_log.txt", 'a') as f:
+        json.dump(stats, f)
+
+    while driver.page() == '/raid/boss_bp':
         try:
             ActionChains(driver).move_to_element_with_offset(
                 driver.find_element_by_id(
-                    "gadget_contents"), 254, 50).click().perform()
-
-            time.sleep(0.1)
-
-            if driver.find_element_by_id("hunt_result"):
-                break
+                    'gadget_contents'), 254, 50).click().perform()
 
         except NoSuchElementException:
             pass
@@ -104,7 +109,6 @@ def skip_animation(driver):
                 AttributeError,
                 MoveTargetOutOfBoundsException):
             web_driver.tb()
-            web_driver.print_temp("skip animation: Timeout")
             break
 
     web_driver.print_temp("skip animation: success")
