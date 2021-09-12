@@ -87,7 +87,7 @@ def click_cycle():
         try:
             if bar_value >= pre_click_stam:
                 canvas.click()
-                time.sleep(.25)
+                time.sleep(.5)
             if int(stam_bar.text.split('/')[0]) - pre_click_stam > 2:
                 raise NoProgressException
         except ElementClickInterceptedException:
