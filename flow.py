@@ -17,10 +17,10 @@ from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def slayer_event(driver):
+
     driver.switch_to.parent_frame()
     WebDriverWait(driver, 10).until(
             ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
-
 
     if driver.page() == "/raid/boss_achievement":
         try:
@@ -43,6 +43,11 @@ def slayer_event(driver):
             nav.battle_page(driver, slayer_event=True)
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
+
+        elif driver.page() == "/hunt/raid_list":
+            if nav.battle_page(driver, slayer_event=True):
+                logic.fight(driver, slayer_event=True)
+                nav.battle_to_event_stage(driver)
 
         elif driver.page() == "/hunt/hunt_event_top":
             if check_slayer_boss(driver):
