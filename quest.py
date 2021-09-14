@@ -82,21 +82,16 @@ def click_cycle():
 
     for i in range(12):
         bar_value = int(stam_bar.text.split('/')[0])
-        # print(f"bar value = {bar_value}")
-        # print(f"pre click = {pre_click_stam}")
         try:
             if bar_value >= pre_click_stam:
                 canvas.click()
-                time.sleep(.5)
+                time.sleep(.75)
             if int(stam_bar.text.split('/')[0]) - pre_click_stam > 2:
                 raise NoProgressException
         except ElementClickInterceptedException:
             raise NotEnoughStaminaException
         except AttributeError:
             raise MaxCardLimitException
-        # except StaleElementReferenceException:
-        #     web_driver.print_temp("sere")
-        #     break
 
     if pre_click_stam <= int(stam_bar.text.split('/')[0]):
         raise NoProgressException
