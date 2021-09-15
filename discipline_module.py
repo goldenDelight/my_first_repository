@@ -26,7 +26,8 @@ def display_cards_by_rank(driver, rank="N"):
                   "UR": 5,
                   "LR": 6, }
 
-    rarity_selector = Select(driver.execute_script("return document.querySelector('#select_filter_rare');"))
+    rarity_selector = Select(driver.execute_script(
+        "return document.querySelector('#select_filter_rare');"))
     rarity_selector.select_by_index(rank_index.get(rank))
 
 
@@ -42,13 +43,15 @@ def confirm_has_xp_fodder(driver):
 # 10x loop clicking first card displayed, then clicks confirm button
 def select_xp_fodder_cards(driver):
     for i in range(10):
-        fodder = driver.execute_script("return document.querySelector('#card_image');")
+        fodder = driver.execute_script(
+            "return document.querySelector('#card_image');")
         driver.execute_script("arguments[0].click();", fodder)
 
 
 # Triggers discipline action, waits 3s for button staleness before returning
 def trigger_discipline_event(driver):
-    discipline = driver.execute_script("return document.querySelector('#button_compose_confirm');")
+    discipline = driver.execute_script(
+        "return document.querySelector('#button_compose_confirm');")
     driver.execute_script("arguments[0].click();", discipline)
 
     try:
@@ -57,6 +60,7 @@ def trigger_discipline_event(driver):
         pass
 
 
+# noinspection PyBroadException
 def skip_animation(driver):
     while driver.page() == '/compose/compose_index':
         try:
@@ -65,7 +69,7 @@ def skip_animation(driver):
 
             time.sleep(0.5)
 
-        except:
+        except Exception:
             break
 
 
@@ -73,14 +77,14 @@ def check_under_leveled(driver):
     card_info = driver.execute_script(
         "return document.querySelector('#main_frame_compose > div:nth-child(4) > div:nth-child(3)');")
 
-    if card_info.text == 'Lv:\nATK:\nDEF:':
+    if card_info.text == "Lv:\nATK:\nDEF:":
         return False
     else:
         return True
 
 
 def assisted_levelling(driver):
-    if "compose_index" in driver.page():
+    if 'compose_index' in driver.page():
         display_cards_by_rank(driver)
 
         if confirm_has_xp_fodder(driver):

@@ -3,17 +3,20 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 def restore_stam(self):
-    use_small_stams = self.execute_script("return document.querySelectorAll('.decision_button_column_2")
+    use_small_stams = self.execute_script(
+        'return document.querySelectorAll(\'.decision_button_column_2')
     self.execute_script("arguments[0].click();", use_small_stams[0])
 
     WebDriverWait(self, 3).until(ec.staleness_of(use_small_stams))
 
-    confirm_use = self.find_element_by_css_selector("#main_frame_item > div:nth-child(5) > a:nth-child(1)")
+    confirm_use = self.find_element_by_css_selector(
+        '#main_frame_item > div:nth-child(5) > a:nth-child(1)')
     self.execute_script("arguments[0].click();", confirm_use)
 
     WebDriverWait(self, 3).until(ec.staleness_of(confirm_use))
 
-    return_to_event = self.find_element_by_css_selector("#main_frame_item > div:nth-child(5) > a:nth-child(1)")
+    return_to_event = self.find_element_by_css_selector(
+        '#main_frame_item > div:nth-child(5) > a:nth-child(1)')
     self.execute_script("arguments[0].click();", return_to_event)
 
     WebDriverWait(self, 3).until(ec.staleness_of(return_to_event))
@@ -22,7 +25,7 @@ def restore_stam(self):
     all_anchors = self.execute_script("return document.querySelectorAll('a');")
     for a in all_anchors:
         href = a.get_attribute('href')
-        if "/tower/tower_start" in href:
+        if '/tower/tower_start' in href:
             self.execute_script("arguments[0].click();", a)
 
 
@@ -38,9 +41,9 @@ def screen_cards(driver):
     for card in cards_to_sell:
         info = driver.execute_script("return arguments[0].querySelectorAll('*');", card)
         for i in info:
-            if i.get_attribute('src') == "https://cf.tna.dmmgames.com/img/common/card/S/C00040b." \
-                                         "73fcabcb223e0a96e48159015766757a.png":
-                print(i.get_attribute("id"))
+            if i.get_attribute('src') == 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b.' \
+                                         '73fcabcb223e0a96e48159015766757a.png':
+                print(i.get_attribute('id'))
                 print(cards_to_sell.index(card))
 
 

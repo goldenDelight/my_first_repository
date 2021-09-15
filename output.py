@@ -21,12 +21,12 @@ def boss_counter(driver):
         driver.beast_count.append(time.time())
 
     print(f"\n\n{time.strftime('%m/%d %H:%M:%S')}\n{driver.boss_name}:"
-          f'\n\n\tSpeed Demon: {rate(driver.demon_count)}'
-          f'\n\tRed Oni: {rate(driver.oni_count)}'
-          f'\n\tDark Beast: {rate(driver.beast_count)}'
-          f'\n\tFulst: {rate(driver.fulst_count)}'
-          f'\n\tYatsu: {rate(driver.yatsu_count)}'
-          f'\n\tXPS-11A: {rate(driver.bone_count)}\n')
+          f"\n\n\tSpeed Demon: {rate(driver.demon_count)}"
+          f"\n\tRed Oni: {rate(driver.oni_count)}"
+          f"\n\tDark Beast: {rate(driver.beast_count)}"
+          f"\n\tFulst: {rate(driver.fulst_count)}"
+          f"\n\tYatsu: {rate(driver.yatsu_count)}"
+          f"\n\tXPS-11A: {rate(driver.bone_count)}\n")
 
 
 def rate(encounters):

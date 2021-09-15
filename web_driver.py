@@ -15,7 +15,7 @@ test_account = {"email": "sk8pirate24@gmail.com",
                 "username": "lonelybum"}
 
 
-class custom_driver(WebDriver):
+class CustomDriver(WebDriver):
     def __init__(self, main=True):
         super().__init__()
         self.get("https://www.nutaku.net/games/taimanin-asagi-battle-arena/play/")

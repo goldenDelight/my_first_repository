@@ -15,20 +15,20 @@ from selenium.webdriver.support.wait import WebDriverWait
 from handlers import RequestError0
 
 search_syntax_dic = {
-    "css": By.CSS_SELECTOR,
-    "xpath": By.XPATH,
-    "id": By.ID,
-    "tag": By.TAG_NAME,
-    "class": By.CLASS_NAME,
-    "name": By.NAME
+    'css': By.CSS_SELECTOR,
+    'xpath': By.XPATH,
+    'id': By.ID,
+    'tag': By.TAG_NAME,
+    'class': By.CLASS_NAME,
+    'name': By.NAME
 }
 
 find_syntax_dic = {
-    "id": (lambda a, b: a.find_element_by_id(b)),
-    "tag": (lambda a, b: a.find_element_by_tag_name(b)),
-    "class": (lambda a, b: a.find_element_by_class_name(b)),
-    "name": (lambda a, b: a.find_element_by_name(b)),
-    "css": (lambda a, b: a.find_element_by_css_selector(b))
+    'id': (lambda a, b: a.find_element_by_id(b)),
+    'tag': (lambda a, b: a.find_element_by_tag_name(b)),
+    'class': (lambda a, b: a.find_element_by_class_name(b)),
+    'name': (lambda a, b: a.find_element_by_name(b)),
+    'css': (lambda a, b: a.find_element_by_css_selector(b))
 }
 
 
@@ -37,7 +37,8 @@ def page(driver):
         return driver.execute_script("return location_url")
     except JavascriptException:
         driver.switch_to.parent_frame()
-        WebDriverWait(driver, 10).until(ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
+        WebDriverWait(driver, 10).until(
+            ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
 
 
 def bp_pot_tracker(driver, count):
@@ -49,7 +50,9 @@ def bp_pot_tracker(driver, count):
 
 def click(driver, search_key, search_value):
     try:
-        WebDriverWait(driver, 3).until(ec.element_to_be_clickable((search_syntax_dic.get(search_key), search_value)))
+        WebDriverWait(driver, 3).until(
+            ec.element_to_be_clickable(
+                (search_syntax_dic.get(search_key), search_value)))
     except TimeoutException:
         pass
 
@@ -59,7 +62,8 @@ def click(driver, search_key, search_value):
         driver.execute_script("arguments[0].click();", element)
         WebDriverWait(driver, 3).until(ec.staleness_of(element))
     except NoSuchElementException:
-        if driver.find_element_by_id("gadget_contents").text == 'Request Error(0)':
+        if driver.find_element_by_id(
+                'gadget_contents').text == "Request Error(0)":
             raise RequestError0
     except TimeoutException:
         print_temp("element not stale")
@@ -123,9 +127,9 @@ def search_cycle(driver, locator, value=None, parent=None):
 
 
 def set_boss_name(driver):
-    # status = driver.execute_script("return document.getElementsByClassName('quest_boss_status_1');")
-    WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, "quest_boss_status_1")))
-    status = driver.find_elements_by_class_name("quest_boss_status_1")
+    WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
+        (By.CLASS_NAME, 'quest_boss_status_1')))
+    status = driver.find_elements_by_class_name('quest_boss_status_1')
     name = status[0].text
     if name is not None:
         driver.boss_name = name
@@ -151,7 +155,7 @@ def print_temp(_str, temp=True):
 
 def animated_text(stall_text, wait=13, interval=1):
     for c in range(wait):
-        print(stall_text, end="\r")
+        print(stall_text, end='\r')
         if stall_text.__len__() == 13:
             stall_text = "stalling"
         else:
@@ -169,13 +173,13 @@ def tb():
 
 
 def get_bp_pot_count(driver):
-    driver.click("class", "top_menu_7")
-    btns = driver.find_elements_by_class_name("decision_button_column_2")
+    driver.click('class', 'top_menu_7')
+    btns = driver.find_elements_by_class_name('decision_button_column_2')
     driver.execute_script("arguments[0].click();", btns[2])
 
     WebDriverWait(driver, 4).until(ec.staleness_of(btns[2]))
 
-    items = driver.find_elements_by_class_name("item_shop_description")
+    items = driver.find_elements_by_class_name('item_shop_description')
     driver.bp_pot_count = re.sub('[^0-9]', "", items[16].text)
     print(driver.bp_pot_count)
 

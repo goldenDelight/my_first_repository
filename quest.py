@@ -37,7 +37,7 @@ def initialize_vars(driver) -> None:
         "return document.querySelector('#stam_gage_num');")
 
     if stam_bar is not None:
-        pre_click_stam = int(stam_bar.text.split("/")[0])
+        pre_click_stam = int(stam_bar.text.split('/')[0])
         current_stam = 0
 
 
@@ -57,7 +57,7 @@ def grind(driver, slayer_event=False):
 
     while pre_click_stam >= current_stam:
         try:
-            pre_click_stam = int(stam_bar.text.split("/")[0])
+            pre_click_stam = int(stam_bar.text.split('/')[0])
             click_cycle()
         except TimeoutException: break
         except StaleElementReferenceException:
@@ -67,8 +67,10 @@ def grind(driver, slayer_event=False):
                 canvas = driver.execute_script(
                     "return document.querySelector('#canvas');")
                 canvas.click()
-            except StaleElementReferenceException: break
-            except AttributeError: break
+            except StaleElementReferenceException:
+                break
+            except AttributeError:
+                break
         except NoProgressException:
             web_driver.print_temp("ending grind sequence")
             break

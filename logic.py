@@ -31,13 +31,13 @@ def fight(driver, slayer_event=False):
     try:
         name = WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((
-                By.CLASS_NAME, "quest_boss_status_1")))
+                By.CLASS_NAME, 'quest_boss_status_1')))
         if "(AR)" in name.text:
             if bp < 3:
                 battle.full_attack(driver)
                 WebDriverWait(driver, 3).until(
                     ec.visibility_of_element_located((
-                        By.ID, "modal-win-inner")))
+                        By.ID, 'modal-win-inner')))
                 utilities.do_bp(driver, slayer_event)
                 battle.full_attack(driver)
             else:
@@ -46,10 +46,9 @@ def fight(driver, slayer_event=False):
             web_driver.print_temp("fully attacking", False)
 
         elif bp < 1:
-        # if bp < 1:
             battle.weak_attack(driver)
             WebDriverWait(driver, 3).until(
-                ec.visibility_of_element_located((By.ID, "modal-win-inner")))
+                ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
             utilities.do_bp(driver, slayer_event)
             battle.weak_attack(driver)
         else:
@@ -62,10 +61,12 @@ def fight(driver, slayer_event=False):
     except TimeoutException:
         try:
             driver.find(
-                "css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
+                'css', 'a.closePopup:nth-child(6) > div:nth-child(1)').click()
         except AttributeError:
             return
-    except (WebDriverException, JavascriptException, AttributeError):
+    except (WebDriverException,
+            JavascriptException,
+            AttributeError):
         web_driver.tb()
 
     finally:
@@ -79,16 +80,17 @@ def fight(driver, slayer_event=False):
                 nav.defeat_retry(driver)
                 fight(driver, slayer_event)
         else:
-            driver.wait_for('id', "canvas_box")
-            driver.wait_for('id', "canvas")
-            driver.execute_script('gadgets.util.runOnLoadHandlers();')
+            driver.wait_for('id', 'canvas_box')
+            driver.wait_for('id', 'canvas')
+            driver.execute_script("gadgets.util.runOnLoadHandlers();")
             startup.game_start(driver)
 
 
 def skip_animation(driver):
     """
-    Skips do_battle cinematic. Loop of action-chain clicks at hardcoded coordinates of 'skip'
-    button hidden under canvas. The loop breaks if canvas returns as None, or after 3s.
+    Skips do_battle cinematic. Loop of action-chain clicks at hardcoded
+    coordinates of 'skip' button hidden under canvas. The loop breaks if
+    canvas returns as None, or after 3s.
     """
 
     while driver.page() == '/raid/boss_bp':

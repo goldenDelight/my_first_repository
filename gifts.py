@@ -12,13 +12,14 @@ m = "gifts"
 
 
 def claim_all(driver):
-    driver.click("class", "decision_button_column_1")
+    driver.click('class', 'decision_button_column_1')
 
     try:
-        WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.ID, "modal-win-inner")))
-        popup = driver.find_element_by_id("modal-win-inner")
+        WebDriverWait(driver, 3).until(
+            ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
+        popup = driver.find_element_by_id('modal-win-inner')
 
-        c = popup.find_element_by_tag_name("a")
+        c = popup.find_element_by_tag_name('a')
         driver.execute_script("arguments[0].click();", c)
 
     except Exception: pass
@@ -29,7 +30,7 @@ def full_inventory(driver):
 
 
 def get_gifts(driver):
-    driver.click("class", "decision_button_column_1")
-    driver.click("class", "back_button_column_1")
+    driver.click('class', 'decision_button_column_1')
+    driver.click('class', 'back_button_column_1')
     driver.boss_name = None
     print("driver.boss_name = None")

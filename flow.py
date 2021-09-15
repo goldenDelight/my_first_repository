@@ -17,39 +17,37 @@ from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def slayer_event(driver):
+    refocus_frame(driver)
 
-    driver.switch_to.parent_frame()
-    WebDriverWait(driver, 10).until(
-            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
-
-    if driver.page() == "/raid/boss_achievement":
+    if driver.page() == '/raid/boss_achievement':
         try:
-            canvas = driver.execute_script("return document.querySelector('#canvas');")
+            canvas = driver.execute_script(
+                "return document.querySelector('#canvas');")
             canvas.click()
         except AttributeError:
             pass
     try:
 
-        if driver.page() == "/item/item_shop":
+        if driver.page() == '/item/item_shop':
             raise ShopBreakException
 
-        if driver.page() == "/raid/boss_arrival":
+        if driver.page() == '/raid/boss_arrival':
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == "/hunt/hunt_start":
+        elif driver.page() == '/hunt/hunt_start':
             quest.grind(driver, slayer_event=True)
             nav.quest_to_boss_list(driver, slayer_event=True)
             nav.battle_page(driver, slayer_event=True)
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == "/hunt/raid_list":
+        elif driver.page() == '/hunt/raid_list':
             if nav.battle_page(driver, slayer_event=True):
                 logic.fight(driver, slayer_event=True)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.page() == "/hunt/hunt_event_top":
+        elif driver.page() == '/hunt/hunt_event_top':
             if check_slayer_boss(driver):
                 if nav.battle_page(driver, slayer_event=True):
                     logic.fight(driver, slayer_event=True)
@@ -70,10 +68,10 @@ def slayer_event(driver):
                 logic.fight(driver, slayer_event=True)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.page() == "/mypage/index":
+        elif driver.page() == '/mypage/index':
             nav.event_page(driver)
 
-        elif driver.page() == "/card/card_max":
+        elif driver.page() == '/card/card_max':
             utilities.sell_cards(driver)
             nav.event_page(driver)
             check_slayer_boss(driver)
@@ -86,15 +84,15 @@ def slayer_event(driver):
     except TimeoutException:
         pass
     except JavascriptException:
-        driver.switch_to.parent_frame()
-        WebDriverWait(driver, 10).until(
-            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
+        refocus_frame(driver)
 
 
 def check_slayer_boss(driver):
     try:
-        WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located((By.TAG_NAME, "a")))
-        boss_list = driver.execute_script("return document.querySelector('a[href*=raid_list]');")
+        WebDriverWait(driver, 5).until(
+            ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
+        boss_list = driver.execute_script(
+            "return document.querySelector('a[href*=raid_list]');")
         driver.execute_script("arguments[0].click();", boss_list)
         return True
     except TimeoutException:
@@ -111,7 +109,7 @@ def grind_routine(driver):
     import quest
 
     try:
-        if driver.page() == "/item/item_shop":
+        if driver.page() == '/item/item_shop':
             raise ShopBreakException
 
         if nav.unclaimed_gifts(driver):
@@ -130,38 +128,36 @@ def grind_routine(driver):
             nav.boss_recon(driver)
             decision_tree(driver)
 
-    except TimeoutException: pass
+    except TimeoutException:
+        pass
     except RequestError0:
         driver.refresh_frame()
     except MaxCardLimitException:
         utilities.sell_cards(driver)
     except JavascriptException:
-        driver.switch_to.parent_frame()
-        WebDriverWait(driver, 10).until(
-            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
+        refocus_frame(driver)
 
 
 # decides: fight now, stall for assist, or stall for bp
 def decision_tree(driver):
     """
-    :param driver:
-    :return N/A:
-    Called when driver reaches boss battle page, determines course of action based on boss and current BP/cooldown:
+    :param driver: :return N/A: Called when driver reaches boss battle page,
+    determines course of action based on boss and current BP/cooldown:
 
-    request assist - if boss is not oni or speed, clicks 'request assist', stalls for assist on main page.
-    wait for cooldown - if boss is oni or speed but BP cooldown is < 10min, stalls for cooldown on main page
-    fight - when BP capped at 6
-          - BP > 0, boss is oni or speed and cooldown >10min
-          - BP is 0, boss is oni, BP cooldown >10min (uses 1 bp pot)
+    request assist - if boss is not oni or speed, clicks 'request assist',
+    stalls for assist on main page. wait for cooldown - if boss is oni or
+    speed but BP cooldown is < 10min, stalls for cooldown on main page fight
+    - when BP capped at 6 - BP > 0, boss is oni or speed and cooldown >10min
+    - BP is 0, boss is oni, BP cooldown >10min (uses 1 bp pot)
     """
 
     import status
     bp = status.current_bp(driver)
-    cd = status.current_bp_cd(driver)
 
     if driver.boss_name is None:
-        WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, "quest_boss_status_1")))
-        status = driver.find_elements_by_class_name("quest_boss_status_1")
+        WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
+            (By.CLASS_NAME, 'quest_boss_status_1')))
+        status = driver.find_elements_by_class_name('quest_boss_status_1')
         name = status[0].text
         if name is not None:
             driver.boss_name = name
@@ -175,12 +171,6 @@ def decision_tree(driver):
 
     elif "Red Oni" in driver.boss_name:
         web_driver.print_temp(f"red oni in boss name is True")
-        # if driver.initial_bp_cooldown <= 10:
-        #     web_driver.print_temp(f"bp cooldown <= 10 min")
-        #     time.sleep(60*driver.initial_bp_cooldown)
-        #     stall(driver, False)
-        # else:
-        #     web_driver.print_temp(f"bp cooldown not <= 10 min")
         nav.boss_alert(driver)
         nav.raid_boss_list(driver)
         nav.battle_page(driver)
@@ -191,7 +181,7 @@ def decision_tree(driver):
 
         if driver.initial_bp_cooldown <= 10:
             web_driver.print_temp(f"bp cooldown <= 10 min")
-            time.sleep(60*driver.initial_bp_cooldown)
+            time.sleep(60 * driver.initial_bp_cooldown)
             stall(driver, False)
         else:
             web_driver.print_temp(f"bp cooldown not <= 10 min")
@@ -203,8 +193,9 @@ def decision_tree(driver):
     else:  # request assist
         web_driver.print_temp("request assist")
         try:
-            driver.click("class", "raid_help_button")
-        except NoSuchElementException: pass
+            driver.click('class', 'raid_help_button')
+        except NoSuchElementException:
+            pass
 
         web_driver.print_temp("stall for assist")
         stall(driver, bp)
@@ -240,3 +231,9 @@ def stall(driver, full_restore=True):
         raise RequestError0
 
     driver.done_stalling = status.current_bp(driver) == target_bp
+
+
+def refocus_frame(driver):
+    driver.switch_to.parent_frame()
+    WebDriverWait(driver, 10).until(
+        ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
