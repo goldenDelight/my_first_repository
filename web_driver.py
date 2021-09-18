@@ -55,6 +55,28 @@ class CustomDriver(WebDriver):
         self.bone_count = [time.time()]
         self.beast_count = [time.time()]
 
+        self.arena_event_points: int = 0
+        self.arena_event_fight_count: int = 0
+        self.arena_event_loss_count: int = 0
+
+    def set_arena_event_points(self, points):
+        self.arena_event_points = points
+
+    def get_arena_event_points(self):
+        return self.arena_event_points
+
+    def set_arena_event_fight_count(self, points):
+        self.arena_event_fight_count = points
+
+    def get_arena_event_fight_count(self):
+        return self.arena_event_fight_count
+
+    def set_arena_event_loss_count(self, points):
+        self.arena_event_loss_count = points
+
+    def get_arena_event_loss_count(self):
+        return self.arena_event_loss_count
+
     def page(self):
         return wd.page(self)
 
