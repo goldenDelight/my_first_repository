@@ -14,10 +14,11 @@ import quest
 import utilities
 import web_driver
 from handlers import MaxCardLimitException, RequestError0, ShopBreakException
+from web_driver_methods import refocus_frame
 
 
 def slayer_event(driver):
-    refocus_frame(driver)
+    driver.refocus_frame()
 
     if driver.page() == '/raid/boss_achievement':
         try:
@@ -84,7 +85,7 @@ def slayer_event(driver):
     except TimeoutException:
         pass
     except JavascriptException:
-        refocus_frame(driver)
+        driver.refocus_frame()
 
 
 def check_slayer_boss(driver):
@@ -135,7 +136,7 @@ def grind_routine(driver):
     except MaxCardLimitException:
         utilities.sell_cards(driver)
     except JavascriptException:
-        refocus_frame(driver)
+        driver.refocus_frame()
 
 
 # decides: fight now, stall for assist, or stall for bp
@@ -151,8 +152,7 @@ def decision_tree(driver):
     - BP is 0, boss is oni, BP cooldown >10min (uses 1 bp pot)
     """
 
-    import status
-    bp = status.current_bp(driver)
+    bp = driver.check_current_bp()
 
     if driver.boss_name is None:
         WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
@@ -204,7 +204,6 @@ def decision_tree(driver):
 # boss_recon for boss_name in 10s loop
 # forces fight after 40min or if initial_bp maxes out
 def stall(driver, full_restore=True):
-    import status
     import nav
 
     if driver.initial_bp >= 5 or full_restore:
@@ -212,14 +211,14 @@ def stall(driver, full_restore=True):
     else:
         target_bp = driver.initial_bp + 1
 
-    print(f"starting bp = {status.current_bp(driver)}\n"
+    print(f"starting bp = {driver.check_current_bp()}\n"
           f"target bp = {target_bp}")
     web_driver.print_temp("starting stall", temp=False)
 
     try:
         while True:
             nav.main_page(driver, force_refresh=True)
-            if status.current_bp(driver) >= target_bp:
+            if driver.check_current_bp() >= target_bp:
                 break
             elif nav.unclaimed_gifts(driver):
                 web_driver.print_temp("got assisted", temp=False)
@@ -230,10 +229,4 @@ def stall(driver, full_restore=True):
     except TypeError:
         raise RequestError0
 
-    driver.done_stalling = status.current_bp(driver) == target_bp
-
-
-def refocus_frame(driver):
-    driver.switch_to.parent_frame()
-    WebDriverWait(driver, 10).until(
-        ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
+    driver.done_stalling = driver.check_current_bp() == target_bp

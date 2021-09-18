@@ -5,7 +5,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 import startup
-import wd
+import web_driver_methods
 
 main_account = {"email": "11throwaway.23@gmail.com",
                 "password": "skateboard",
@@ -78,52 +78,52 @@ class CustomDriver(WebDriver):
         return self.arena_event_loss_count
 
     def page(self):
-        return wd.page(self)
+        return web_driver_methods.page(self)
 
     def bp_pot_tracker(self, count):
-        return wd.bp_pot_tracker(self, count)
+        return web_driver_methods.bp_pot_tracker(self, count)
 
     def bp_cooldown(self):
-        return wd.bp_cooldown(self)
+        return web_driver_methods.bp_cooldown(self)
 
     def current_bp(self):
-        return wd.current_bp(self)
+        return web_driver_methods.check_current_bp(self)
 
     def click(self, search_type, search_value):
-        wd.click(self, search_type, search_value)
+        web_driver_methods.click(self, search_type, search_value)
 
     def find(self, search_type, search_value, parent=None):
-        wd.find(self, search_type, search_value, parent)
+        web_driver_methods.find(self, search_type, search_value, parent)
 
     def wait_for(self, locator, value, t=5, parent=None):
-        wd.wait_for(self, locator, value, t, parent)
+        web_driver_methods.wait_for(self, locator, value, t, parent)
 
     def find_href(self, substring):
-        wd.find_href(self, substring)
+        web_driver_methods.find_href(self, substring)
 
     def find_substring(self, sub_str, parent=None):
-        wd.find_substring(self, sub_str, parent)
+        web_driver_methods.find_substring(self, sub_str, parent)
 
     def search_cycle(self, locator, value=None, parent=None):
-        wd.search_cycle(self, locator, value, parent)
-
-    def set_boss_name(self):
-        wd.set_boss_name(self)
+        web_driver_methods.search_cycle(self, locator, value, parent)
 
     def get_bp_pot_count(self):
-        wd.get_bp_pot_count(self)
+        web_driver_methods.get_bp_pot_count(self)
 
     def refresh_frame(self):
-        wd.refresh_frame(self)
+        web_driver_methods.refresh_frame(self)
+
+    def refocus_frame(self):
+        web_driver_methods.refocus_frame(self)
 
 
 def print_temp(_str, temp=True):
-    wd.print_temp(_str, temp)
+    web_driver_methods.print_temp(_str, temp)
 
 
 def tb():
-    wd.tb()
+    web_driver_methods.tb()
 
 
 def animated_text(stall_text, wait=13, interval=1):
-    wd.animated_text(stall_text, wait=13, interval=1)
+    web_driver_methods.animated_text(stall_text, wait=13, interval=1)

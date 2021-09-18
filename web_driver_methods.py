@@ -7,7 +7,7 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     UnexpectedAlertPresentException,
     JavascriptException,
-    StaleElementReferenceException)
+    StaleElementReferenceException, WebDriverException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -126,24 +126,37 @@ def search_cycle(driver, locator, value=None, parent=None):
     return None
 
 
-def set_boss_name(driver):
-    WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
-        (By.CLASS_NAME, 'quest_boss_status_1')))
-    status = driver.find_elements_by_class_name('quest_boss_status_1')
-    name = status[0].text
-    if name is not None:
-        driver.boss_name = name
-    return None
-
-
 def bp_cooldown(driver):
-    import status
-    return status.current_bp_cd(driver)
+    try:
+        bp_text = driver.execute_script(
+            "return document.getElementById('bp_gage_time').innerText")[-2:]
+        cd = int(bp_text)
+        print(f"bp cooldown: {cd % 20}")
+        return cd % 20
+    except JavascriptException:
+        driver.tb()
+        if driver.find_element_by_id(
+                'gadget_contents').text == "Request Error(0)":
+            driver.refresh_frame()
 
 
-def current_bp(driver):
-    import status
-    return status.current_bp(driver)
+def check_current_bp(driver):
+    try:
+        curr_bp = driver.execute_script(
+            "return document.getElementById('top_bp_num').innerText")[0]
+        if curr_bp is not None:
+            return int(curr_bp)
+
+    except JavascriptException:
+        driver.tb()
+        if driver.find_element_by_id('gadget_contents').text == "Request Error(0)":
+            driver.refresh_frame()
+        return None
+
+    except WebDriverException:
+        driver.tb()
+        driver.print_temp(
+            "Unable to get 'innerText' of undefined or null ref.", False)
 
 
 def print_temp(_str, temp=True):
@@ -193,3 +206,9 @@ def refresh_frame(driver):
     import startup
     startup.game_start(driver)
     return None
+
+
+def refocus_frame(driver):
+    driver.switch_to.parent_frame()
+    WebDriverWait(driver, 10).until(
+        ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
