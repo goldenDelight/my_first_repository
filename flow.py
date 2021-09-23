@@ -13,7 +13,9 @@ import output
 import quest
 import utilities
 import taba_bot
-from handlers import MaxCardLimitException, RequestError0, ShopBreakException
+from handlers import (MaxCardLimitException,
+                      RequestError0,
+                      ShopBreakException)
 
 
 def slayer_event(driver):

@@ -1,5 +1,7 @@
-from selenium.common.exceptions import TimeoutException, \
-    StaleElementReferenceException, ElementClickInterceptedException
+from selenium.common.exceptions import (TimeoutException,
+                                        StaleElementReferenceException,
+                                        ElementClickInterceptedException,
+                                        NoSuchElementException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -11,7 +13,6 @@ from handlers import ShopBreakException
 
 
 def full_power_event_grind(driver):
-    from selenium.common.exceptions import NoSuchElementException
 
     if driver.bot.page() == '/mypage/index':
         nav.event_page(driver)

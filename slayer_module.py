@@ -1,18 +1,13 @@
-import time
-
 import selenium.webdriver.support.expected_conditions as ec
 from selenium.common.exceptions import (JavascriptException,
-                                        TimeoutException,
-                                        NoSuchElementException)
+                                        TimeoutException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
 import logic
 import nav
-import output
 import quest
 import utilities
-import taba_bot
 from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 

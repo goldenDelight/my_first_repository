@@ -4,7 +4,8 @@ import selenium.webdriver.support.expected_conditions as ec
 from selenium.common.exceptions import (
     StaleElementReferenceException,
     ElementClickInterceptedException,
-    TimeoutException, NoSuchElementException)
+    TimeoutException,
+    NoSuchElementException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.expected_conditions import \

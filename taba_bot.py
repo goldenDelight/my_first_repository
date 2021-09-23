@@ -1,10 +1,4 @@
 import time
-
-from selenium.common.exceptions import JavascriptException, TimeoutException, \
-    NoSuchElementException, UnexpectedAlertPresentException, \
-    StaleElementReferenceException, WebDriverException
-from selenium.webdriver.support.wait import WebDriverWait
-
 import re
 import sys
 import traceback

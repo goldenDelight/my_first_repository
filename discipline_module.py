@@ -1,15 +1,11 @@
 import time
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 
 # nav to Discipline main page
-import taba_bot
-
-
 def nav_to_discipline(driver):
     links = driver.execute_script("return document.querySelectorAll('a');")
     for link in links:
