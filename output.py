@@ -2,31 +2,31 @@ import time
 
 
 def slayer_event_logs(driver, dic):
-    driver.slayer_battle_logs.add(time.time(), dic)
+    driver.bot.slayer_battle_logs.add(time.time(), dic)
 
 
 def boss_counter(driver):
 
-    if 'Speed Demon' in driver.boss_name:
-        driver.demon_count.append(time.time())
-    elif 'Red Oni' in driver.boss_name:
-        driver.oni_count.append(time.time())
-    elif 'Yatsu' in driver.boss_name:
-        driver.yatsu_count.append(time.time())
-    elif 'Fulst' in driver.boss_name:
-        driver.fulst_count.append(time.time())
-    elif 'XPS' in driver.boss_name:
-        driver.bone_count.append(time.time())
-    elif 'Beast' in driver.boss_name:
-        driver.beast_count.append(time.time())
+    if 'Speed Demon' in driver.bot.boss_name:
+        driver.bot.demon_count.append(time.time())
+    elif 'Red Oni' in driver.bot.boss_name:
+        driver.bot.oni_count.append(time.time())
+    elif 'Yatsu' in driver.bot.boss_name:
+        driver.bot.yatsu_count.append(time.time())
+    elif 'Fulst' in driver.bot.boss_name:
+        driver.bot.fulst_count.append(time.time())
+    elif 'XPS' in driver.bot.boss_name:
+        driver.bot.bone_count.append(time.time())
+    elif 'Beast' in driver.bot.boss_name:
+        driver.bot.beast_count.append(time.time())
 
-    print(f"\n\n{time.strftime('%m/%d %H:%M:%S')}\n{driver.boss_name}:"
-          f"\n\n\tSpeed Demon: {rate(driver.demon_count)}"
-          f"\n\tRed Oni: {rate(driver.oni_count)}"
-          f"\n\tDark Beast: {rate(driver.beast_count)}"
-          f"\n\tFulst: {rate(driver.fulst_count)}"
-          f"\n\tYatsu: {rate(driver.yatsu_count)}"
-          f"\n\tXPS-11A: {rate(driver.bone_count)}\n")
+    print(f"\n\n{time.strftime('%m/%d %H:%M:%S')}\n{driver.bot.boss_name}:"
+          f"\n\n\tSpeed Demon: {rate(driver.bot.demon_count)}"
+          f"\n\tRed Oni: {rate(driver.bot.oni_count)}"
+          f"\n\tDark Beast: {rate(driver.bot.beast_count)}"
+          f"\n\tFulst: {rate(driver.bot.fulst_count)}"
+          f"\n\tYatsu: {rate(driver.bot.yatsu_count)}"
+          f"\n\tXPS-11A: {rate(driver.bot.bone_count)}\n")
 
 
 def rate(encounters):

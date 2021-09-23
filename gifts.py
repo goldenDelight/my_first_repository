@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+import taba_bot
+
 m = "gifts"
 
 
@@ -12,7 +14,7 @@ m = "gifts"
 
 
 def claim_all(driver):
-    driver.click('class', 'decision_button_column_1')
+    driver.bot.click('class', 'decision_button_column_1')
 
     try:
         WebDriverWait(driver, 3).until(
@@ -26,11 +28,11 @@ def claim_all(driver):
 
 
 def full_inventory(driver):
-    return driver.find_substring("You have unclaimed_gifts gifts.") is None
+    return driver.bot.find_substring("You have unclaimed_gifts gifts.") is None
 
 
 def get_gifts(driver):
-    driver.click('class', 'decision_button_column_1')
-    driver.click('class', 'back_button_column_1')
-    driver.boss_name = None
-    print("driver.boss_name = None")
+    driver.bot.click('class', 'decision_button_column_1')
+    driver.bot.click('class', 'back_button_column_1')
+    driver.bot.boss_name = None
+    print("driver.bot.boss_name = None")

@@ -13,7 +13,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
-import web_driver
+import taba_bot
 from handlers import MaxCardLimitException
 from handlers import NoProgressException
 from handlers import NotEnoughStaminaException
@@ -28,7 +28,7 @@ loading_box: WebElement
 def initialize_vars(driver) -> None:
     global canvas, stam_bar, pre_click_stam, current_stam
 
-    web_driver.print_temp("initializing grind vars")
+    taba_bot.print_temp("initializing grind vars")
 
     WebDriverWait(driver, 5).until(ec_visible((By.ID, 'canvas')))
 
@@ -66,13 +66,13 @@ def grind(driver, slayer_event=False):
             try:
                 canvas = driver.execute_script(
                     "return document.querySelector('#canvas');")
-                canvas.click()
+                driver.bot.click()
             except StaleElementReferenceException:
                 break
             except AttributeError:
                 break
         except NoProgressException:
-            web_driver.print_temp("ending grind sequence")
+            taba_bot.print_temp("ending grind sequence")
             break
         except NotEnoughStaminaException:
             utilities.use_stam(driver)

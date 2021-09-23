@@ -9,7 +9,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
-import web_driver
+import taba_bot
 
 xp_card_png = 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b' \
               '.73fcabcb223e0a96e48159015766757a.png '
@@ -34,12 +34,12 @@ def sell_cards(driver):
         ec.presence_of_all_elements_located((By.ID, 'card_image')))
     rarity_dropdown = driver.find_element_by_id('select_filter_rare')
     Select(rarity_dropdown).select_by_index(1)
-    driver.click('id', 'button_bulk')
+    driver.bot.click('id', 'button_bulk')
 
     keep_xp(driver)
 
-    driver.click('id', 'button_sell_confirm')
-    driver.click('id', 'button_sell_result')
+    driver.bot.click('id', 'button_sell_confirm')
+    driver.bot.click('id', 'button_sell_result')
 
     nav.main_page(driver)
 
@@ -84,7 +84,7 @@ def use_stam(driver, tower_event=False):
         driver.execute_script("arguments[0].click();", use_pots)
         WebDriverWait(driver, 3).until(ec.staleness_of(use_pots))
     except TimeoutException:
-        web_driver.tb()
+        taba_bot.my_traceback()
     time.sleep(0.5)
     time.sleep(1.5)
     try:
@@ -94,19 +94,19 @@ def use_stam(driver, tower_event=False):
             "return document.querySelector('a[href*=use_action]')")
         driver.execute_script("arguments[0].click();", confirm)
     except TimeoutException:
-        web_driver.tb()
+        taba_bot.my_traceback()
 
     try:
-        driver.click('class', 'back_button_column_1')
+        driver.bot.click('class', 'back_button_column_1')
 
     except (TimeoutException, StaleElementReferenceException):
-        web_driver.tb()
+        taba_bot.my_traceback()
     WebDriverWait(driver, 5).until(
         ec.presence_of_element_located((By.ID, 'loader')))
     time.sleep(0.5)
 
 
-def do_bp(driver, slayer_event):
+def do_bp(driver, is_event):
     try:
         pots = driver.execute_script('return document.querySelector('
                                      '\'#modal-win-inner > div > div > '
@@ -115,16 +115,16 @@ def do_bp(driver, slayer_event):
                                      'div:nth-child(1)\');')
         owned = int(pots.text.split()[-1])
         selector = Select(driver.find_element_by_class_name('selector'))
-        if not slayer_event:
+        if not is_event:
             selector.select_by_value("1")
-            web_driver.print_temp(f"{owned-1} bp pots left")
+            taba_bot.print_temp(f"{owned - 1} bp pots left")
         else:
-            web_driver.print_temp(f"{owned-6} bp pots left", False)
-        driver.click('class', 'decision_button_column_2')
-        driver.click('class', 'decision_button_column_2')
-        driver.click('class', 'back_button_column_1')
+            taba_bot.print_temp(f"{owned - 6} bp pots left", False)
+        driver.bot.click('class', 'decision_button_column_2')
+        driver.bot.click('class', 'decision_button_column_2')
+        driver.bot.click('class', 'back_button_column_1')
     except JavascriptException:
-        web_driver.tb()
+        taba_bot.my_traceback()
 
 
 def card_limit_popup(driver):
@@ -161,7 +161,7 @@ def use_pot(driver):
         WebDriverWait(driver, 3).until(ec.staleness_of(return_))
 
     except AttributeError:
-        web_driver.tb()
+        taba_bot.my_traceback()
         return False
 
     return True

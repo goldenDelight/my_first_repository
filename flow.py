@@ -12,43 +12,42 @@ import nav
 import output
 import quest
 import utilities
-import web_driver
+import taba_bot
 from handlers import MaxCardLimitException, RequestError0, ShopBreakException
-from web_driver_methods import refocus_frame
 
 
 def slayer_event(driver):
-    driver.refocus_frame()
+    driver.bot.refocus_frame()
 
-    if driver.page() == '/raid/boss_achievement':
+    if driver.bot.page() == '/raid/boss_achievement':
         try:
             canvas = driver.execute_script(
                 "return document.querySelector('#canvas');")
-            canvas.click()
+            driver.bot.click()
         except AttributeError:
             pass
     try:
 
-        if driver.page() == '/item/item_shop':
+        if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
 
-        if driver.page() == '/raid/boss_arrival':
+        if driver.bot.page() == '/raid/boss_arrival':
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/hunt/hunt_start':
+        elif driver.bot.page() == '/hunt/hunt_start':
             quest.grind(driver, slayer_event=True)
             nav.quest_to_boss_list(driver, slayer_event=True)
             nav.battle_page(driver, slayer_event=True)
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/hunt/raid_list':
+        elif driver.bot.page() == '/hunt/raid_list':
             if nav.battle_page(driver, slayer_event=True):
                 logic.fight(driver, slayer_event=True)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/hunt/hunt_event_top':
+        elif driver.bot.page() == '/hunt/hunt_event_top':
             if check_slayer_boss(driver):
                 if nav.battle_page(driver, slayer_event=True):
                     logic.fight(driver, slayer_event=True)
@@ -69,23 +68,23 @@ def slayer_event(driver):
                 logic.fight(driver, slayer_event=True)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/mypage/index':
+        elif driver.bot.page() == '/mypage/index':
             nav.event_page(driver)
 
-        elif driver.page() == '/card/card_max':
+        elif driver.bot.page() == '/card/card_max':
             utilities.sell_cards(driver)
             nav.event_page(driver)
             check_slayer_boss(driver)
             nav.event_stage(driver)
 
-        elif driver.page() == '/raid/boss_help_select':
+        elif driver.bot.page() == '/raid/boss_help_select':
             import battle
             battle.get_partner(driver)
 
     except TimeoutException:
         pass
     except JavascriptException:
-        driver.refocus_frame()
+        driver.bot.refocus_frame()
 
 
 def check_slayer_boss(driver):
@@ -110,7 +109,7 @@ def grind_routine(driver):
     import quest
 
     try:
-        if driver.page() == '/item/item_shop':
+        if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
 
         if nav.unclaimed_gifts(driver):
@@ -132,11 +131,11 @@ def grind_routine(driver):
     except TimeoutException:
         pass
     except RequestError0:
-        driver.refresh_frame()
+        driver.bot.refresh_frame()
     except MaxCardLimitException:
         utilities.sell_cards(driver)
     except JavascriptException:
-        driver.refocus_frame()
+        driver.bot.refocus_frame()
 
 
 # decides: fight now, stall for assist, or stall for bp
@@ -152,52 +151,52 @@ def decision_tree(driver):
     - BP is 0, boss is oni, BP cooldown >10min (uses 1 bp pot)
     """
 
-    bp = driver.check_current_bp()
+    bp = driver.bot.check_current_bp()
 
-    if driver.boss_name is None:
+    if driver.bot.boss_name is None:
         WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
             (By.CLASS_NAME, 'quest_boss_status_1')))
         status = driver.find_elements_by_class_name('quest_boss_status_1')
         name = status[0].text
         if name is not None:
-            driver.boss_name = name
-            output.boss_counter(driver)
+            driver.bot.boss_name = name
+            output.boss_counter(driver.bot)
 
-    web_driver.print_temp("the council will decide your fate")
+    taba_bot.print_temp("the council will decide your fate")
 
     if bp == 6:
         print("6 bp == fight")
         logic.fight(driver)
 
-    elif "Red Oni" in driver.boss_name:
-        web_driver.print_temp(f"red oni in boss name is True")
+    elif "Red Oni" in driver.bot.boss_name:
+        taba_bot.print_temp(f"red oni in boss name is True")
         nav.boss_alert(driver)
         nav.raid_boss_list(driver)
         nav.battle_page(driver)
         logic.fight(driver)
 
-    elif "Speed Demon" in driver.boss_name:
-        web_driver.print_temp(f"speed demon in boss name is True")
+    elif "Speed Demon" in driver.bot.boss_name:
+        taba_bot.print_temp(f"speed demon in boss name is True")
 
-        if driver.initial_bp_cooldown <= 10:
-            web_driver.print_temp(f"bp cooldown <= 10 min")
-            time.sleep(60 * driver.initial_bp_cooldown)
+        if driver.bot.initial_bp_cooldown <= 10:
+            taba_bot.print_temp(f"bp cooldown <= 10 min")
+            time.sleep(60 * driver.bot.initial_bp_cooldown)
             stall(driver, False)
         else:
-            web_driver.print_temp(f"bp cooldown not <= 10 min")
+            taba_bot.print_temp(f"bp cooldown not <= 10 min")
         nav.boss_alert(driver)
         nav.raid_boss_list(driver)
         nav.battle_page(driver)
         logic.fight(driver)
 
     else:  # request assist
-        web_driver.print_temp("request assist")
+        taba_bot.print_temp("request assist")
         try:
-            driver.click('class', 'raid_help_button')
+            driver.bot.click('class', 'raid_help_button')
         except NoSuchElementException:
             pass
 
-        web_driver.print_temp("stall for assist")
+        taba_bot.print_temp("stall for assist")
         stall(driver, bp)
 
 
@@ -206,27 +205,26 @@ def decision_tree(driver):
 def stall(driver, full_restore=True):
     import nav
 
-    if driver.initial_bp >= 5 or full_restore:
+    if driver.bot.initial_bp >= 5 or full_restore:
         target_bp = 6
     else:
-        target_bp = driver.initial_bp + 1
+        target_bp = driver.bot.initial_bp + 1
 
-    print(f"starting bp = {driver.check_current_bp()}\n"
+    print(f"starting bp = {driver.bot.check_current_bp()}\n"
           f"target bp = {target_bp}")
-    web_driver.print_temp("starting stall", temp=False)
+    taba_bot.print_temp("starting stall", temp=False)
 
     try:
         while True:
             nav.main_page(driver, force_refresh=True)
-            if driver.check_current_bp() >= target_bp:
+            if driver.bot.check_current_bp() >= target_bp:
                 break
             elif nav.unclaimed_gifts(driver):
-                web_driver.print_temp("got assisted", temp=False)
+                taba_bot.print_temp("got assisted", temp=False)
                 break
             else:
-                web_driver.animated_text("stalling")
-                time.sleep(15)
+                taba_bot.animated_text("stalling")
     except TypeError:
         raise RequestError0
 
-    driver.done_stalling = driver.check_current_bp() == target_bp
+    driver.done_stalling = driver.bot.check_current_bp() == target_bp

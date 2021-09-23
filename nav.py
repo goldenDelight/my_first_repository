@@ -5,12 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-import web_driver
+import taba_bot
 from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def boss_alert(driver):
-    if driver.page() == '/mypage/index':
+    if driver.bot.page() == '/mypage/index':
         try:
             WebDriverWait(driver, 3).until(
                 ec.element_to_be_clickable((By.ID, 'boss_alerts_1')))
@@ -22,16 +22,16 @@ def boss_alert(driver):
 
 def main_page(driver, force_refresh=False):
     try:
-        if driver.page() == '/item/item_shop':
+        if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
-        elif driver.page() != '/mypage/index' or force_refresh:
-            driver.click('id', 'mypage')
+        elif driver.bot.page() != '/mypage/index' or force_refresh:
+            driver.bot.click('id', 'mypage')
     except JavascriptException:
         raise JavascriptException
 
 
 def slayer_event_page(driver):
-    if driver.page() == '/mypage/index':
+    if driver.bot.page() == '/mypage/index':
         hunt = driver.execute_script(
             "return document.querySelector('a[href*=hunt_event_top]');")
         driver.execute_script("arguments[0].click();", hunt)
@@ -50,7 +50,7 @@ def battle_to_event_stage(driver):
                                     "result > div > div:nth-child(5) > div > "
                                     "div:nth-child(6)');").text
         pts = pts.split('\u3000')[-1]
-        web_driver.print_temp(pts, False)
+        taba_bot.print_temp(pts, False)
 
     except Exception:
         pass
@@ -88,7 +88,7 @@ def battle_page(driver, slayer_event=False):
                 if driver.account.get('username') in info[-2]:
                     driver.execute_script("arguments[0].click();", frame)
                     WebDriverWait(driver, 3).until(ec.staleness_of(frame))
-                    return driver.page() == '/raid/boss_arrival'
+                    return driver.bot.page() == '/raid/boss_arrival'
 
         except (IndexError, TimeoutException):
             pass
@@ -100,36 +100,36 @@ def battle_page(driver, slayer_event=False):
 
 
 def quest_to_boss_list(driver, slayer_event=False):
-    if slayer_event or driver.page() == '/quest/quest_start':
+    if slayer_event or driver.bot.page() == '/quest/quest_start':
         cvs = driver.find_element_by_id('canvas')
         ActionChains(driver).move_to_element_with_offset(
             driver.find_element_by_id(
                 'gadget_contents'), 200, 300).click().perform()
         WebDriverWait(driver, 3).until(ec.staleness_of(cvs))
-    if driver.page() == '/card/card_max':
+    if driver.bot.page() == '/card/card_max':
         raise MaxCardLimitException
 
 
 def raid_boss_list(driver):
-    if driver.page() == '/raid/raid_index':
+    if driver.bot.page() == '/raid/raid_index':
         return True
-    elif driver.page() == '/card/card_max':
+    elif driver.bot.page() == '/card/card_max':
         raise MaxCardLimitException
 
     try:
         main_page(driver)
-        driver.click('id', 'boss_alerts_1')
+        driver.bot.click('id', 'boss_alerts_1')
     except NoSuchElementException:
         return False
 
-    return driver.page() == '/raid/raid_index'
+    return driver.bot.page() == '/raid/raid_index'
 
 
 def quest(driver):
     try:
-        driver.click('class', 'top_menu_1')
+        driver.bot.click('class', 'top_menu_1')
 
-        if driver.page() == '/card/card_max':
+        if driver.bot.page() == '/card/card_max':
             raise MaxCardLimitException
 
         WebDriverWait(driver, 3).until(ec.presence_of_element_located((By.ID,'chapter1')))
@@ -153,10 +153,10 @@ def quest(driver):
 def event_page(driver):
     try:
         main_page(driver)
-        driver.click('css', '#main_frame > a:nth-child(7)')
+        driver.bot.click('css', '#main_frame > a:nth-child(7)')
         return True
     except Exception:
-        web_driver.tb()
+        taba_bot.my_traceback()
 
     return False
 
@@ -173,11 +173,11 @@ def event_stage(driver):
 
 
 def gifts(driver):
-    driver.click('class', 'button-present')
-    if driver.page() == '/card/card_max':
+    driver.bot.click('class', 'button-present')
+    if driver.bot.page() == '/card/card_max':
         raise MaxCardLimitException
     else:
-        return driver.page() == '/present/index'
+        return driver.bot.page() == '/present/index'
 
 
 def unclaimed_gifts(driver):
@@ -191,13 +191,13 @@ def unclaimed_gifts(driver):
         return 'present_2' in icon_url
 
     except AttributeError:
-        web_driver.tb()
+        taba_bot.my_traceback()
     except StaleElementReferenceException:
-        web_driver.tb()
+        taba_bot.my_traceback()
     except TimeoutException:
         if driver.find_element_by_id(
                 'gadget_contents').text == 'Request Error(0)':
-            driver.refresh_frame()
+            driver.bot.refresh_frame()
 
 
 def boss_recon(driver):
@@ -205,10 +205,10 @@ def boss_recon(driver):
         (By.CLASS_NAME, 'quest_boss_status_1')))
     name = status[0].text
     if "(AR)" in name:
-        web_driver.print_temp("fighting AR", False)
+        taba_bot.print_temp("fighting AR", False)
 
-    if driver.boss_name is None:
-        driver.boss_name = name
+    if driver.bot.boss_name is None:
+        driver.bot.boss_name = name
         import output
         output.boss_counter(driver)
 
@@ -226,6 +226,6 @@ def defeat_retry(driver):
 
 
 def arena(driver):
-    if driver.page() != "/arena/battle_index":
+    if driver.bot.page() != "/arena/battle_index":
         d = driver.execute_script("return document.querySelector('.top_menu_2');")
         driver.execute_script("arguments[0].click();", d)

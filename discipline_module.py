@@ -7,6 +7,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 # nav to Discipline main page
+import taba_bot
+
+
 def nav_to_discipline(driver):
     links = driver.execute_script("return document.querySelectorAll('a');")
     for link in links:
@@ -62,10 +65,9 @@ def trigger_discipline_event(driver):
 
 # noinspection PyBroadException
 def skip_animation(driver):
-    while driver.page() == '/compose/compose_index':
+    while driver.bot.page() == '/compose/compose_index':
         try:
-            ActionChains(driver).move_to_element_with_offset(
-                driver.find_element_by_id("gadget_contents"), 450, 675).click().perform()
+            driver.click().perform()
 
             time.sleep(0.5)
 
@@ -84,7 +86,7 @@ def check_under_leveled(driver):
 
 
 def assisted_levelling(driver):
-    if 'compose_index' in driver.page():
+    if 'compose_index' in driver.bot.page():
         display_cards_by_rank(driver)
 
         if confirm_has_xp_fodder(driver):

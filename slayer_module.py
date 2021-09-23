@@ -12,12 +12,12 @@ import nav
 import output
 import quest
 import utilities
-import web_driver
+import taba_bot
 from handlers import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def nav_to_event_splash(driver):
-    if '/hunt/hunt_event_top' not in driver.page():
+    if '/hunt/hunt_event_top' not in driver.bot.page():
         links = driver.execute_script("return document.querySelectorAll('a');")
         for link in links:
             if 'hunt_event_top' in link.get_attribute('href'):
@@ -26,7 +26,7 @@ def nav_to_event_splash(driver):
 
 
 def nav_to_boss_list(driver):
-    if '/hunt/raid_list' not in driver.page():
+    if '/hunt/raid_list' not in driver.bot.page():
         links = driver.execute_script("return document.querySelectorAll('a');")
         for link in links:
             if '/hunt/raid_list' in link.get_attribute('href'):
@@ -35,7 +35,7 @@ def nav_to_boss_list(driver):
 
 
 def nav_to_boss(driver):
-    if '/raid/boss_arrival' not in driver.page():
+    if '/raid/boss_arrival' not in driver.bot.page():
         links = driver.execute_script("return document.querySelectorAll('a');")
         for link in links:
             if '/raid/boss_arrival' in link.get_attribute("href"):
@@ -44,7 +44,7 @@ def nav_to_boss(driver):
 
 
 def nav_to_stage(driver):
-    if '/hunt/hunt_start' not in driver.page():
+    if '/hunt/hunt_start' not in driver.bot.page():
         links = driver.execute_script("return document.querySelectorAll('a');")
         for link in links:
             if '/hunt/hunt_start' in link.get_attribute('href'):
@@ -57,30 +57,30 @@ def slayer_event(driver):
     WebDriverWait(driver, 10).until(
         ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
 
-    if driver.page() == '/raid/boss_achievement':
+    if driver.bot.page() == '/raid/boss_achievement':
         try:
             canvas = driver.execute_script(
                 "return document.querySelector('#canvas');")
-            canvas.click()
+            driver.bot.click()
         except AttributeError:
             pass
     try:
 
-        if driver.page() == '/item/item_shop':
+        if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
 
-        if driver.page() == '/raid/boss_arrival':
+        if driver.bot.page() == '/raid/boss_arrival':
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/hunt/hunt_start':
+        elif driver.bot.page() == '/hunt/hunt_start':
             quest.grind(driver, slayer_event=True)
             nav.quest_to_boss_list(driver, slayer_event=True)
             nav.battle_page(driver, slayer_event=True)
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/hunt/hunt_event_top':
+        elif driver.bot.page() == '/hunt/hunt_event_top':
             if check_for_boss(driver):
                 if nav.battle_page(driver, slayer_event=True):
                     logic.fight(driver, slayer_event=True)
@@ -101,16 +101,16 @@ def slayer_event(driver):
                 logic.fight(driver, slayer_event=True)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.page() == '/mypage/index':
+        elif driver.bot.page() == '/mypage/index':
             nav.event_page(driver)
 
-        elif driver.page() == '/card/card_max':
+        elif driver.bot.page() == '/card/card_max':
             utilities.sell_cards(driver)
             nav.event_page(driver)
             check_for_boss(driver)
             nav.event_stage(driver)
 
-        elif driver.page() == '/raid/boss_help_select':
+        elif driver.bot.page() == '/raid/boss_help_select':
             import battle
             battle.get_partner(driver)
 
@@ -142,7 +142,7 @@ def grind_routine(driver):
     import quest
 
     try:
-        if driver.page() == '/item/item_shop':
+        if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
 
         if nav.battle_page(driver):
@@ -158,7 +158,7 @@ def grind_routine(driver):
     except TimeoutException:
         pass
     except RequestError0:
-        driver.refresh_frame()
+        driver.bot.refresh_frame()
     except MaxCardLimitException:
         utilities.sell_cards(driver)
     except JavascriptException:

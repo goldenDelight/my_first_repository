@@ -14,7 +14,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import battle
 import nav
 import utilities
-import web_driver
+import taba_bot
 
 
 def fight(driver, slayer_event=False):
@@ -43,7 +43,7 @@ def fight(driver, slayer_event=False):
             else:
                 battle.full_attack(driver)
 
-            web_driver.print_temp("fully attacking", False)
+            taba_bot.print_temp("fully attacking", False)
 
         elif bp < 1:
             battle.weak_attack(driver)
@@ -54,20 +54,19 @@ def fight(driver, slayer_event=False):
         else:
             battle.weak_attack(driver)
 
-        web_driver.print_temp("weakly attacking", False)
+        taba_bot.print_temp("weakly attacking", False)
 
     except NoSuchElementException:
         pass
     except TimeoutException:
         try:
-            driver.find(
-                'css', 'a.closePopup:nth-child(6) > div:nth-child(1)').click()
+            driver.bot.click()
         except AttributeError:
             return
     except (WebDriverException,
             JavascriptException,
             AttributeError):
-        web_driver.tb()
+        taba_bot.my_traceback()
 
     finally:
         if slayer_event:
@@ -76,12 +75,12 @@ def fight(driver, slayer_event=False):
             import battle_log
             battle_log.track_battle(driver)
 
-            if driver.page() == '/raid/boss_fail/':
+            if driver.bot.page() == '/raid/boss_fail/':
                 nav.defeat_retry(driver)
                 fight(driver, slayer_event)
         else:
-            driver.wait_for('id', 'canvas_box')
-            driver.wait_for('id', 'canvas')
+            driver.bot.wait_for('id', 'canvas_box')
+            driver.bot.wait_for('id', 'canvas')
             driver.execute_script("gadgets.util.runOnLoadHandlers();")
             startup.game_start(driver)
 
@@ -93,18 +92,16 @@ def skip_animation(driver):
     canvas returns as None, or after 3s.
     """
 
-    while driver.page() == '/raid/boss_bp':
+    while driver.bot.page() == '/raid/boss_bp':
         try:
-            ActionChains(driver).move_to_element_with_offset(
-                driver.find_element_by_id(
-                    'gadget_contents'), 254, 50).click().perform()
+            driver.click().perform()
 
         except NoSuchElementException:
             pass
         except (TimeoutException,
                 AttributeError,
                 MoveTargetOutOfBoundsException):
-            web_driver.tb()
+            taba_bot.my_traceback()
             break
 
-    web_driver.print_temp("skip animation: success")
+    taba_bot.print_temp("skip animation: success")

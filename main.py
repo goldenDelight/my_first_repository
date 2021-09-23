@@ -1,3 +1,10 @@
+import time
+
+from selenium.common.exceptions import (StaleElementReferenceException)
+import flow
+from handlers import ShopBreakException
+import custom_driver
+
 # This is a sample Python script.
 
 # Press Shift+F10 to execute it or replace it with your code. Press Double
@@ -5,13 +12,19 @@
 # and settings.
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f"Hi, {name}")  # Press Ctrl+F8 to toggle the breakpoint.
-
-
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi("PyCharm")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    driver = custom_driver.CustomDriver()
+
+    time.sleep(5)
+
+    while True:
+        try:
+            # full_power_event_grind(driver)
+            # flow.is_event(driver)
+            flow.grind_routine(driver)
+        except StaleElementReferenceException:
+            pass
+        except ShopBreakException:
+            break

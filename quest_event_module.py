@@ -6,22 +6,22 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
-import web_driver
+import taba_bot
 from handlers import ShopBreakException
 
 
 def full_power_event_grind(driver):
     from selenium.common.exceptions import NoSuchElementException
 
-    if driver.page() == '/mypage/index':
+    if driver.bot.page() == '/mypage/index':
         nav.event_page(driver)
-    elif driver.page() == '/item/item_shop':
+    elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
-    if driver.page() == '/tower/tower_event_top':
+    if driver.bot.page() == '/tower/tower_event_top':
         try:
             if driver.find_element_by_id('canvas'):
-                driver.find_element_by_id('canvas').click()
+                driver.bot.click()
 
         except NoSuchElementException:
             try:
@@ -35,17 +35,17 @@ def full_power_event_grind(driver):
                     points_str = info_lines[2]
                     points_int: int = points_str.split()[-1]
 
-                    web_driver.print_temp(f"points: {points_int}")
+                    taba_bot.print_temp(f"points: {points_int}")
 
                     if points_int >= 8000000:
                         raise ShopBreakException
             except Exception:
                 pass
 
-    if driver.page() == '/tower/tower_event_top':
+    if driver.bot.page() == '/tower/tower_event_top':
         try:
             if driver.find_element_by_id('canvas'):
-                driver.find_element_by_id('canvas').click()
+                driver.bot.click()
         except NoSuchElementException:
             pass
 
@@ -55,32 +55,32 @@ def full_power_event_grind(driver):
         driver.execute_script("arguments[0].click();", stage)
         WebDriverWait(driver, 3).until(ec.staleness_of(stage))
 
-    elif driver.page() == '/item/item_shop':
+    elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
-    if driver.page() == '/tower/tower_start':
+    if driver.bot.page() == '/tower/tower_start':
         try:
             WebDriverWait(driver, 2).until(
                 ec.visibility_of_all_elements_located((By.ID, 'modal-win')))
             utilities.use_stam(driver, tower_event=True)
         except TimeoutException:
-            driver.click('class', 'quest_dash_button')
+            driver.bot.click('class', 'quest_dash_button')
 
-    elif driver.page() == '/item/item_shop':
+    elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
-    if driver.page() == '/tower/tower_event_result':
+    if driver.bot.page() == '/tower/tower_event_result':
         try:
             if driver.find_element_by_id('canvas'):
-                driver.find_element_by_id('canvas').click()
+                driver.bot.click()
         except NoSuchElementException:
             try:
-                driver.click('class', 'decision_button_column_1')
+                driver.bot.click('class', 'decision_button_column_1')
             except StaleElementReferenceException:
                 pass
         try:
             if driver.find_element_by_id('canvas'):
-                driver.find_element_by_id('canvas').click()
+                driver.bot.click()
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:
@@ -88,11 +88,11 @@ def full_power_event_grind(driver):
         except ElementClickInterceptedException:
             pass
 
-    elif driver.page() == '/item/item_shop':
+    elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
-    if driver.page() == '/card/card_max':
+    if driver.bot.page() == '/card/card_max':
         utilities.sell_cards(driver)
-    elif driver.page() == '/item/item_shop':
+    elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 

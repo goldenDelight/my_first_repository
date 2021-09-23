@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+import taba_bot
+
 
 def game_start(driver):
     print("game start\r")
@@ -34,7 +36,10 @@ def log_in(driver):
     # click 'login' button on top bar
     open_login_css = '#page > header > div.flx-a-c.mar-a-l > div.user.flx-a-c > ' \
                      'span.button.outlined.white.ripple.js-btn-modal.js-login '
-    driver.click('css', open_login_css)
+    driver.bot.click('css', open_login_css)
+
+    email = None
+    password = None
 
     # locate account email and password entry fields
     for i in driver.find_elements_by_tag_name('input'):
@@ -44,17 +49,17 @@ def log_in(driver):
             password = i
 
     # enter account email/password
-    email.send_keys(driver.account.get("email"))
-    password.send_keys(driver.account.get("password"))
+    email.send_keys("11throwaway.23@gmail.com")
+    password.send_keys("skateboard")
 
     # submit login, close pop-up
     login_btn_css = '#page > div.modal.js-modal-signup-login.open.display-up > div > ' \
                     'div.flx.content-login.js-content-login.display-up > div > form > button '
     WebDriverWait(driver, 5).until(ec.element_to_be_clickable((By.CSS_SELECTOR, login_btn_css)))
-    driver.click('css', login_btn_css)
+    driver.bot.click('css', login_btn_css)
 
     continue_playing_btn_css = '#page > div.js-main-content.main-content.sidebar-closed > div.flx-column > ' \
                                'div.flx.cnt-product > div.cnt-product-col-right.flx-column > ' \
                                'section.box.rounded.dark.flx-column > form > button '
     WebDriverWait(driver, 10).until(ec.element_to_be_clickable((By.CSS_SELECTOR, continue_playing_btn_css)))
-    driver.click('css', continue_playing_btn_css)
+    driver.bot.click('css', continue_playing_btn_css)
