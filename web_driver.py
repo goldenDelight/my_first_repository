@@ -1,7 +1,9 @@
 import time
 
 from selenium.common.exceptions import (
-    TimeoutException, ElementClickInterceptedException, ElementNotInteractableException)
+    TimeoutException,
+    ElementClickInterceptedException,
+    ElementNotInteractableException)
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 import startup
