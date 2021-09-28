@@ -8,9 +8,9 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 import taba_bot
-from handlers import (MaxCardLimitException,
-                      RequestError0,
-                      ShopBreakException)
+from custom_exceptions import (MaxCardLimitException,
+                               RequestError0,
+                               ShopBreakException)
 
 
 def boss_alert(driver):

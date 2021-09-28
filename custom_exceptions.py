@@ -67,11 +67,11 @@ class RequestError0(Exception):
     print("request error detected")
 
 
-class wtfException(Exception):
+class WtfException(Exception):
     """Raised when wtf?!"""
     print("wtf")
 
 
 class ShopBreakException(Exception):
-    """Raised when trying to break the chains of capitalism"""
+    """Raised when breaking the shackles of capitalism"""
     print("well done comrade")

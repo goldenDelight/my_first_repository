@@ -13,7 +13,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from handlers import RequestError0
+from custom_exceptions import RequestError0
 
 search_syntax_dic = {
     'css': By.CSS_SELECTOR,

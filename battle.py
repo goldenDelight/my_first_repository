@@ -10,7 +10,7 @@ from selenium.webdriver.support.expected_conditions import \
 from selenium.webdriver.support.wait import WebDriverWait
 
 import taba_bot
-from handlers import RequestError0
+from custom_exceptions import RequestError0
 
 
 def start_battle(driver):
@@ -68,12 +68,12 @@ def full_attack(driver):
 
 
 def req_assist(driver):
-    from handlers import wtfException
+    from custom_exceptions import WtfException
     taba_bot.print_temp("request assist")
 
     try:
         driver.bot.click('class', 'raid_help_button')
-    except (TimeoutException, AttributeError, WebDriverException, wtfException):
+    except (TimeoutException, AttributeError, WebDriverException, WtfException):
         pass
     except NoSuchElementException:
         # not typo, literal engrish

@@ -15,9 +15,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 import nav
 import utilities
 import taba_bot
-from handlers import MaxCardLimitException
-from handlers import NoProgressException
-from handlers import NotEnoughStaminaException
+from custom_exceptions import MaxCardLimitException
+from custom_exceptions import NoProgressException
+from custom_exceptions import NotEnoughStaminaException
 
 canvas: WebElement
 stam_bar: WebElement

@@ -9,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import nav
 import utilities
 import taba_bot
-from handlers import ShopBreakException
+from custom_exceptions import ShopBreakException
 
 
 def full_power_event_grind(driver):

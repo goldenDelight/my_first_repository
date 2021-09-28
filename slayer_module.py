@@ -8,7 +8,7 @@ import logic
 import nav
 import quest
 import utilities
-from handlers import MaxCardLimitException, RequestError0, ShopBreakException
+from custom_exceptions import MaxCardLimitException, RequestError0, ShopBreakException
 
 
 def nav_to_event_splash(driver):

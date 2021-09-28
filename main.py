@@ -3,7 +3,7 @@ from threading import Thread
 
 from selenium.common.exceptions import (StaleElementReferenceException)
 import flow
-from handlers import ShopBreakException
+from custom_exceptions import ShopBreakException
 import custom_driver
 
 # This is a sample Python script.
