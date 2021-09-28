@@ -25,6 +25,7 @@ class CustomDriver(WebDriver):
         # startup sequence for game: login, change scope to game_frame, start
 
         self.bot = taba_bot.Bot(self)
+
         self.ignore = (ElementClickInterceptedException,
                        ElementNotInteractableException,
                        TimeoutException)

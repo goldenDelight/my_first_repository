@@ -5,18 +5,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 def game_start(driver):
-    print("game start\r")
 
-    if driver.switch_to.parent_frame():
-        print("switched to parent frame\r")
+    driver.switch_to.parent_frame()
 
-    if WebDriverWait(driver, 10).until(
-            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame"))):
-        print("switched to game frame\r")
+    WebDriverWait(driver, 10).until(
+            ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame")))
 
-    attempt = 0
-    while attempt < 5:
-        attempt += 1
+    for attempt in range(5):
         try:
             WebDriverWait(driver, 3).until(
                 ec.element_to_be_clickable((By.CLASS_NAME, 'game_start_over')))
