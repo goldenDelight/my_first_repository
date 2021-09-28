@@ -12,12 +12,7 @@ import custom_driver
 # and settings.
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-
-    driver = custom_driver.CustomDriver()
-
-    time.sleep(5)
+def alt_thread(driver):
 
     while True:
         try:
@@ -28,3 +23,19 @@ if __name__ == '__main__':
             pass
         except ShopBreakException:
             break
+
+    print("DONE WITH GRINDING THREADS THANKS YOU GOODBYE NOW ;)")
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+
+    driver = custom_driver.CustomDriver()
+
+    t1 = Thread(group=None,
+                target=alt_thread,
+                name=None,
+                args=(driver,),
+                kwargs={},
+                daemon=None)
+    t1.run()

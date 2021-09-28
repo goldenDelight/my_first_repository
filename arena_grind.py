@@ -120,31 +120,31 @@ def get_battle_results(driver):
 
         if line.startswith("Total Arena pts "):
             pts = int((line.split()[3])[:-2])
-            total = int(driver.bot.get_arena_event_points())
-            driver.bot.set_arena_event_points(total + pts)
+            total = int(driver.bot.arena_event_points)
+            driver.bot.arena_event_points = total + pts
 
-            count = int(driver.bot.get_arena_event_fight_count())
-            driver.bot.set_arena_event_fight_count(count + 1)
+            count = int(driver.bot.arena_event_fight_count)
+            driver.bot.arena_event_fight_count = count + 1
 
             if pts < 1000:
-                loss = driver.bot.get_arena_event_loss_count()
-                driver.bot.set_arena_event_loss_count(loss + 1)
+                loss = driver.bot.arena_event_loss_count
+                driver.bot.arena_event_loss_count = loss + 1
                 battle_loss = True
-                me_atk = "?"
-                op_name = "?"
-                op_def = "?"
+                me_atk = -1
+                op_name = -1
+                op_def = -1
 
                 try:
                     me_atk = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_attack_frame_lose');")
-                    me_atk = me_atk.text
+                    me_atk = int(me_atk.text)
+                    time.sleep(0.5)
+
+                    op_def = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_defence_frame_win');")
+                    op_def = int(op_def.text)
                     time.sleep(0.5)
 
                     op_name = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(3)');")
                     op_name = op_name.text
-                    time.sleep(0.5)
-
-                    op_def = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_defence_frame_win');")
-                    op_def = op_def.text
                     time.sleep(0.5)
 
                 except AttributeError:
@@ -154,14 +154,15 @@ def get_battle_results(driver):
             if battle_loss:
                 taba_bot.print_temp(f"my atk: {me_atk}", temp=False)
                 taba_bot.print_temp(f"op def: {op_def} ({op_name})", temp=False)
-                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count()}", temp=False)
-                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count()}", temp=False)
+                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
+                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
                 taba_bot.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
                 break
             else:
+                # taba_bot.print_temp(f"win margin: {me_atk - op_def}", temp=False)
                 taba_bot.print_temp(f"arena_pts: {pts}", temp=False)
-                taba_bot.print_temp(f"arena_pts_total: {driver.bot.arena_event_points()}", temp=False)
-                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count()}", temp=False)
-                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count()}", temp=False)
+                taba_bot.print_temp(f"arena_pts_total: {driver.bot.arena_event_points}", temp=False)
+                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
+                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
                 taba_bot.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
                 break
