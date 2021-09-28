@@ -1,4 +1,5 @@
 import time
+from threading import Thread
 
 from selenium.common.exceptions import (StaleElementReferenceException)
 import flow
