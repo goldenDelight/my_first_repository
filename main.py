@@ -5,7 +5,7 @@ from selenium.common.exceptions import (StaleElementReferenceException)
 import flow
 from custom_exceptions import ShopBreakException
 import custom_driver
-
+from quest_event_module import full_power_event_grind
 # This is a sample Python script.
 
 # Press Shift+F10 to execute it or replace it with your code. Press Double
