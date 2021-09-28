@@ -25,7 +25,7 @@ def slayer_event(driver):
         try:
             canvas = driver.execute_script(
                 "return document.querySelector('#canvas');")
-            driver.bot.click()
+            canvas.click()
         except AttributeError:
             pass
     try:

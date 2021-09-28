@@ -99,9 +99,13 @@ def normal_attack(driver):
 def skip_animation(driver):
     while driver.bot.page() == "/arena/user_confirm":
         time.sleep(1)
-        driver.bot.click().perform()
+        ActionChains(driver).move_to_element_with_offset(
+            driver.find_element_by_id("gadget_contents"), 254,
+            50).click().perform()
         time.sleep(1)
-        driver.bot.click().perform()
+        ActionChains(driver).move_to_element_with_offset(
+            driver.find_element_by_id("gadget_contents"), 700,
+            650).click().perform()
 
 
 def get_battle_results(driver):

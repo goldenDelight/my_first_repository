@@ -60,7 +60,8 @@ def fight(driver, slayer_event=False):
         pass
     except TimeoutException:
         try:
-            driver.bot.click()
+            driver.bot.find(
+                "css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
         except AttributeError:
             return
     except (WebDriverException,
@@ -94,8 +95,9 @@ def skip_animation(driver):
 
     while driver.bot.page() == '/raid/boss_bp':
         try:
-            driver.click().perform()
-
+            ActionChains(driver).move_to_element_with_offset(
+                driver.find_element_by_id(
+                    'gadget_contents'), 254, 50).click().perform()
         except NoSuchElementException:
             pass
         except (TimeoutException,

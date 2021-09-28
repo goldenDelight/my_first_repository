@@ -21,8 +21,7 @@ def full_power_event_grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_top':
         try:
-            if driver.find_element_by_id('canvas'):
-                driver.bot.click()
+            driver.find_element_by_id('canvas').click()
 
         except NoSuchElementException:
             try:
@@ -45,8 +44,7 @@ def full_power_event_grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_top':
         try:
-            if driver.find_element_by_id('canvas'):
-                driver.bot.click()
+            driver.find_element_by_id('canvas').click()
         except NoSuchElementException:
             pass
 
@@ -72,16 +70,14 @@ def full_power_event_grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_result':
         try:
-            if driver.find_element_by_id('canvas'):
-                driver.bot.click()
+            driver.find_element_by_id('canvas').click()
         except NoSuchElementException:
             try:
                 driver.bot.click('class', 'decision_button_column_1')
             except StaleElementReferenceException:
                 pass
         try:
-            if driver.find_element_by_id('canvas'):
-                driver.bot.click()
+            driver.find_element_by_id('canvas').click()
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:

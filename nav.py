@@ -3,6 +3,7 @@ from selenium.common.exceptions import (JavascriptException,
                                         StaleElementReferenceException,
                                         NoSuchElementException)
 # from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
