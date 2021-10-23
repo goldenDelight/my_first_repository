@@ -67,7 +67,7 @@ def grind(driver, slayer_event=False):
             try:
                 canvas = driver.execute_script(
                     "return document.querySelector('#canvas');")
-                driver.bot.click()
+                canvas.click()
             except StaleElementReferenceException:
                 break
             except AttributeError:
