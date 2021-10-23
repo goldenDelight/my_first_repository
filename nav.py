@@ -170,7 +170,7 @@ def event_stage(driver):
     WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
     anchors = driver.execute_script("return document.querySelectorAll('a');")
     for a in anchors:
-        if ((a.get_attribute('onClick') == 'app.back();') or (
+        if a is not None and ((a.get_attribute('onClick') == 'app.back();') or (
                 'hunt_start' in a.get_attribute('href'))):
             driver.execute_script("arguments[0].click();", a)
             WebDriverWait(driver, 10).until(ec.staleness_of(a))
