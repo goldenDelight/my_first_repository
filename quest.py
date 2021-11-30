@@ -88,7 +88,7 @@ def grind(driver, slayer_event=False):
 def click_cycle():
     global stam_bar, pre_click_stam
 
-    for i in range(12):
+    for i in range(3):
         bar_value = int(stam_bar.text.split('/')[0])
         try:
             if bar_value >= pre_click_stam:
