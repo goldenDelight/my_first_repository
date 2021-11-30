@@ -60,7 +60,8 @@ def grind(driver, slayer_event=False):
         try:
             pre_click_stam = int(stam_bar.text.split('/')[0])
             click_cycle()
-        except TimeoutException: break
+        except TimeoutException:
+            break
         except StaleElementReferenceException:
             initialize_vars(driver)
         except AttributeError:

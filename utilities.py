@@ -113,14 +113,24 @@ def do_bp(driver, is_event):
                                      'div:nth-child(7) > div:nth-child(4) > '
                                      'form > div:nth-child(2) > '
                                      'div:nth-child(1)\');')
-        owned = int(pots.text.split()[-1])
         selector = Select(driver.find_element_by_class_name('selector'))
+        owned = int(pots.text.split()[-1])
+
         if not is_event:
             selector.select_by_value("1")
-            taba_bot.print_temp(f"{owned - 1} bp pots left")
-        else:
-            taba_bot.print_temp(f"{owned - 6} bp pots left", False)
-        driver.bot.click('class', 'decision_button_column_2')
+            taba_bot.print_temp(f"{owned - 1} small bp pots left", False)
+            driver.bot.click('class', 'decision_button_column_2')
+        elif is_event:
+            if "6" in selector.first_selected_option.text:
+                driver.bot.click('id', 'IT007')
+                frame = driver.execute_script(
+                    "return document.querySelector('.free_frame02_mid');")
+                owned_pots = int(frame.text.split()[-1])
+                pots_left = owned_pots - 1
+                taba_bot.print_temp(f"{pots_left} full bp pots left", False)
+            else:
+                taba_bot.print_temp(f"{owned - 6} bp pots left", False)
+                driver.bot.click('class', 'decision_button_column_2')
         driver.bot.click('class', 'decision_button_column_2')
         driver.bot.click('class', 'back_button_column_1')
     except JavascriptException:
