@@ -166,4 +166,3 @@ def grind_routine(driver):
         WebDriverWait(driver, 10).until(
                 ec.frame_to_be_available_and_switch_to_it(
                     (By.ID, 'game_frame')))
-
