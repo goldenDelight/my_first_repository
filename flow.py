@@ -10,99 +10,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 import logic
 import nav
 import output
-import quest
 import utilities
 import taba_bot
 from custom_exceptions import (MaxCardLimitException,
                                RequestError0,
                                ShopBreakException)
-
-
-def slayer_event(driver):
-    driver.bot.refocus_frame()
-
-    if driver.bot.page() == '/raid/boss_achievement':
-        try:
-            canvas = driver.execute_script(
-                "return document.querySelector('#canvas');")
-            canvas.click()
-        except AttributeError:
-            pass
-    try:
-
-        if driver.bot.page() == '/item/item_shop':
-            raise ShopBreakException
-
-        if driver.bot.page() == '/raid/boss_arrival':
-            logic.fight(driver, slayer_event=True)
-            nav.battle_to_event_stage(driver)
-
-        elif driver.bot.page() == '/hunt/hunt_start':
-            quest.grind(driver, slayer_event=True)
-            nav.quest_to_boss_list(driver, slayer_event=True)
-            nav.battle_page(driver, slayer_event=True)
-            logic.fight(driver, slayer_event=True)
-            nav.battle_to_event_stage(driver)
-
-        elif driver.bot.page() == '/hunt/raid_list':
-            if nav.battle_page(driver, slayer_event=True):
-                logic.fight(driver, slayer_event=True)
-                nav.battle_to_event_stage(driver)
-
-        elif driver.bot.page() == '/hunt/hunt_event_top':
-            if check_slayer_boss(driver):
-                if nav.battle_page(driver, slayer_event=True):
-                    logic.fight(driver, slayer_event=True)
-                    nav.battle_to_event_stage(driver)
-                else:
-                    nav.event_stage(driver)
-                    quest.grind(driver, slayer_event=True)
-                    nav.quest_to_boss_list(driver, slayer_event=True)
-                    nav.battle_page(driver, slayer_event=True)
-                    logic.fight(driver, slayer_event=True)
-                    nav.battle_to_event_stage(driver)
-
-            else:
-                nav.event_stage(driver)
-                quest.grind(driver, slayer_event=True)
-                nav.quest_to_boss_list(driver, slayer_event=True)
-                nav.battle_page(driver)
-                logic.fight(driver, slayer_event=True)
-                nav.battle_to_event_stage(driver)
-
-        elif driver.bot.page() == '/mypage/index':
-            nav.event_page(driver)
-
-        elif driver.bot.page() == '/card/card_max':
-            utilities.sell_cards(driver)
-            nav.event_page(driver)
-            check_slayer_boss(driver)
-            nav.event_stage(driver)
-
-        elif driver.bot.page() == '/raid/boss_help_select':
-            import battle
-            battle.get_partner(driver)
-
-    except TimeoutException:
-        pass
-    except JavascriptException:
-        driver.bot.refocus_frame()
-
-
-def check_slayer_boss(driver):
-    try:
-        WebDriverWait(driver, 5).until(
-            ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
-        boss_list = driver.execute_script(
-            "return document.querySelector('a[href*=raid_list]');")
-        driver.execute_script("arguments[0].click();", boss_list)
-        return True
-    except TimeoutException:
-        return False
-    except AttributeError:
-        return False
-    except JavascriptException:
-        return False
 
 
 def grind_routine(driver):

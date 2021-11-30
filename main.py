@@ -3,20 +3,18 @@ from threading import Thread
 
 from selenium.common.exceptions import (StaleElementReferenceException)
 import flow
+import tower_event
 from custom_exceptions import ShopBreakException
 import custom_driver
-from tower_event import tower_event_grind
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code. Press Double
-# Shift to search everywhere for classes, files, tool windows, actions,
-# and settings.
 
 
 def alt_thread(driver):
 
     while True:
         try:
+            flow.vanquish_event(driver)
+            tower_event.tower_event_grind(driver)
+            flow.grind_routine(driver)
             # tower_event_grind(driver)
             # flow.is_event(driver)
             flow.grind_routine(driver)

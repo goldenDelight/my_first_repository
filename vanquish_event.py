@@ -8,7 +8,11 @@ import logic
 import nav
 import quest
 import utilities
-from custom_exceptions import MaxCardLimitException, RequestError0, ShopBreakException
+
+from custom_exceptions import \
+    MaxCardLimitException, \
+    RequestError0, \
+    ShopBreakException
 
 
 def nav_to_event_splash(driver):
@@ -47,10 +51,8 @@ def nav_to_stage(driver):
                 break
 
 
-def slayer_event(driver):
-    driver.switch_to.parent_frame()
-    WebDriverWait(driver, 10).until(
-        ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
+def grind(driver):
+    driver.bot.refocus_frame()
 
     if driver.bot.page() == '/raid/boss_achievement':
         try:
@@ -58,7 +60,8 @@ def slayer_event(driver):
                 "return document.querySelector('#canvas');")
             canvas.click()
         except AttributeError:
-            pass
+            return_by_href = driver.bot.find_href('/hunt/hunt_start')
+            return_by_href.click()
     try:
 
         if driver.bot.page() == '/item/item_shop':
@@ -74,6 +77,11 @@ def slayer_event(driver):
             nav.battle_page(driver, slayer_event=True)
             logic.fight(driver, slayer_event=True)
             nav.battle_to_event_stage(driver)
+
+        elif driver.bot.page() == '/hunt/raid_list':
+            if nav.battle_page(driver, slayer_event=True):
+                logic.fight(driver, slayer_event=True)
+                nav.battle_to_event_stage(driver)
 
         elif driver.bot.page() == '/hunt/hunt_event_top':
             if check_for_boss(driver):
@@ -112,10 +120,7 @@ def slayer_event(driver):
     except TimeoutException:
         pass
     except JavascriptException:
-        driver.switch_to.parent_frame()
-        WebDriverWait(driver, 10).until(
-                ec.frame_to_be_available_and_switch_to_it(
-                    (By.ID, 'game_frame')))
+        driver.bot.refocus_frame()
 
 
 def check_for_boss(driver):
