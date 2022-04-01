@@ -76,7 +76,7 @@ def req_assist(driver):
     except (TimeoutException, AttributeError, WebDriverException, WtfException):
         pass
     except NoSuchElementException:
-        # not typo, literal engrish
+        # id text is not a typo, literal engrish
         boss_timer = driver.find_element_by_id('raid_time_rimit')
         if boss_timer is not None and boss_timer.is_displayed():
             taba_bot.print_temp("assist already requested")

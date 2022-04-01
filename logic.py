@@ -105,5 +105,5 @@ def skip_animation(driver):
                 MoveTargetOutOfBoundsException):
             taba_bot.my_traceback()
             break
-
-    taba_bot.print_temp("skip animation: success")
+    print("\n")
+    # taba_bot.print_temp("skip animation: success")

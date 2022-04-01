@@ -118,7 +118,7 @@ def do_bp(driver, event_grind=False):
 
         if event_grind == False:
             selector.select_by_value("1")
-            taba_bot.print_temp(f"{owned - 1} small bp pots left", False)
+            taba_bot.print_temp(f"{owned - 1:,} small bp pots left", False)
             driver.bot.click('class', 'decision_button_column_2')
 
         elif event_grind == True:
