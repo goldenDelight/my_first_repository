@@ -16,7 +16,7 @@ def alt_thread(driver):
             tower_event.tower_event_grind(driver)
             flow.grind_routine(driver)
             # tower_event_grind(driver)
-            # flow.is_event(driver)
+            # flow.event_grind(driver)
             flow.grind_routine(driver)
         except StaleElementReferenceException:
             pass

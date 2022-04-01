@@ -4,7 +4,6 @@ from selenium.common.exceptions import (JavascriptException,
                                         TimeoutException,
                                         StaleElementReferenceException,
                                         NoSuchElementException)
-# from selenium.webdriver import ActionChains
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -113,8 +112,6 @@ def quest_to_boss_list(driver, slayer_event=False):
             driver.find_element_by_id(
                 'gadget_contents'), 200, 300).click().perform()
         WebDriverWait(driver, 3).until(ec.staleness_of(cvs))
-    if driver.bot.page() == '/card/card_max':
-        raise MaxCardLimitException
 
 
 def raid_boss_list(driver):

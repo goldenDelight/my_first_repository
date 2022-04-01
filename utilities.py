@@ -106,7 +106,7 @@ def use_stam(driver, tower_event=False):
     time.sleep(0.5)
 
 
-def do_bp(driver, is_event):
+def do_bp(driver, event_grind=False):
     try:
         pots = driver.execute_script('return document.querySelector('
                                      '\'#modal-win-inner > div > div > '
@@ -116,21 +116,23 @@ def do_bp(driver, is_event):
         selector = Select(driver.find_element_by_class_name('selector'))
         owned = int(pots.text.split()[-1])
 
-        if not is_event:
+        if event_grind == False:
             selector.select_by_value("1")
             taba_bot.print_temp(f"{owned - 1} small bp pots left", False)
             driver.bot.click('class', 'decision_button_column_2')
-        elif is_event:
-            if "6" in selector.first_selected_option.text:
-                driver.bot.click('id', 'IT007')
-                frame = driver.execute_script(
-                    "return document.querySelector('.free_frame02_mid');")
-                owned_pots = int(frame.text.split()[-1])
-                pots_left = owned_pots - 1
-                taba_bot.print_temp(f"{pots_left} full bp pots left", False)
-            else:
-                taba_bot.print_temp(f"{owned - 6} bp pots left", False)
+
+        elif event_grind == True:
+            # if "6" in selector.first_selected_option.text:
+            #     driver.bot.click('id', 'IT007')
+            #     frame = driver.execute_script(
+            #         "return document.querySelector('.free_frame02_mid');")
+            #     owned_pots = int(frame.text.split()[-1])
+            #     pots_left = owned_pots - 1
+            #     taba_bot.print_temp(f"{pots_left} full bp pots left", False)
+            # else:
+                taba_bot.print_temp(f"{owned - 6:,} bp pots left", False)
                 driver.bot.click('class', 'decision_button_column_2')
+
         driver.bot.click('class', 'decision_button_column_2')
         driver.bot.click('class', 'back_button_column_1')
     except JavascriptException:

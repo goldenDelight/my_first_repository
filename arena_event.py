@@ -72,7 +72,7 @@ def weak_attack(driver):
 
         WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((By.ID, "modal-win-inner")))
-        utilities.do_bp(driver, is_event=True)
+        utilities.do_bp(driver, event_grind=True)
 
     weak_attack_btn = driver.execute_script(
         "return document.querySelector('#quest_attack_1');")
@@ -89,7 +89,7 @@ def normal_attack(driver):
 
         WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((By.ID, "modal-win-inner")))
-        utilities.do_bp(driver, is_event=True)
+        utilities.do_bp(driver, event_grind=True)
 
     normal_attack_btn = driver.execute_script(
         "return document.querySelector('#quest_attack_2');")
