@@ -1,3 +1,5 @@
+import time
+
 from selenium.common.exceptions import (JavascriptException,
                                         TimeoutException,
                                         StaleElementReferenceException,
@@ -234,3 +236,17 @@ def arena(driver):
     if driver.bot.page() != "/arena/battle_index":
         d = driver.execute_script("return document.querySelector('.top_menu_2');")
         driver.execute_script("arguments[0].click();", d)
+
+
+def return_to_event(driver):
+    goto_event = driver.execute_script(
+        "return document.querySelector('#main_frame > a:nth-child(7)');")
+    driver.execute_script("arguments[0].click();", goto_event)
+    time.sleep(1)
+    goto_event = driver.execute_script(
+        "return document.querySelector('#stage_choice');")
+    driver.execute_script("arguments[0].click();", goto_event)
+    time.sleep(1)
+    goto_event = driver.execute_script(
+        "return document.querySelector('#event_menu_2 > div:nth-child(3) > a');")
+    driver.execute_script("arguments[0].click();", goto_event)
