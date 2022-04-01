@@ -87,7 +87,8 @@ def battle_page(driver, slayer_event=False):
             ranking_frames = driver.find_elements_by_class_name("ranking_frame")
             container = driver.find_element_by_id("scroll_content")
 
-            for frame in friend_frames:
+            # for frame in friend_frames:
+            for frame in ranking_frames:
                 driver.execute_script("arguments[0].scrollTop=arguments[1].offsetTop", container, frame)
                 info = frame.text.split('\n')
 
