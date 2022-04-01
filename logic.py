@@ -40,10 +40,10 @@ def fight(driver, slayer_event=False):
                         By.ID, 'modal-win-inner')))
                 utilities.do_bp(driver, slayer_event)
                 battle.full_attack(driver)
+                taba_bot.print_temp("fully attacking", False)
             else:
                 battle.full_attack(driver)
-
-            taba_bot.print_temp("fully attacking", False)
+                taba_bot.print_temp("fully attacking", False)
 
         elif bp < 1:
             battle.weak_attack(driver)
@@ -51,10 +51,10 @@ def fight(driver, slayer_event=False):
                 ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
             utilities.do_bp(driver, slayer_event)
             battle.weak_attack(driver)
+            taba_bot.print_temp("weakly attacking", False)
         else:
             battle.weak_attack(driver)
-
-        taba_bot.print_temp("weakly attacking", False)
+            taba_bot.print_temp("weakly attacking", False)
 
     except NoSuchElementException:
         pass
