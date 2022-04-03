@@ -68,11 +68,11 @@ class Bot:
                 ec.frame_to_be_available_and_switch_to_it(
                     (By.ID, 'game_frame')))
 
-    def bp_pot_tracker(self, count):
-        self.bp_pot_count = count
-        if self.driver.starting_bp_pots_count == 0:
-            self.driver.starting_bp_pots_count = count
-        return None
+    # def bp_pot_tracker(self, count):
+    #     self.bp_pot_count = count
+    #     if self.driver.starting_bp_pots_count == 0:
+    #         self.driver.starting_bp_pots_count = count
+    #     return None
 
     def click(self, search_key, search_value):
         try:
@@ -106,8 +106,10 @@ class Bot:
     def find_substring(self, sub_str, parent=None):
         parent = self.driver if parent is None else parent
         try:
-            WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
-            return parent.find_element_by_xpath(f"//*[contains(text(), '{sub_str}')]")
+            WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
+                (By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
+            return parent.find_element_by_xpath(
+                f"//*[contains(text(), '{sub_str}')]")
         except TimeoutException:
             return None
 
@@ -132,29 +134,29 @@ class Bot:
             time.sleep(0.1)
         return None
 
-    def bp_cooldown(self):
-        try:
-            bp_text = self.driver.execute_script(
-                "return document.getElementById('bp_gage_time').innerText")[-2:]
-            cd = int(bp_text)
-            print(f"bp cooldown: {cd % 20}")
-            return cd % 20
-        except JavascriptException:
-            my_traceback()
-            if self.driver.find_element_by_id(
-                    'gadget_contents').text == "Request Error(0)":
-                self.refresh_frame()
+    # def bp_cooldown(self):
+    #     try:
+    #         bp_text = self.driver.execute_script(
+    #             "return document.getElementById('bp_gage_time').innerText")[-2:]
+    #         cd = int(bp_text)
+    #         print(f"bp cooldown: {cd % 20}")
+    #         return cd % 20
+    #     except JavascriptException:
+    #         my_traceback()
+    #         if self.driver.find_element_by_id(
+    #                 'gadget_contents').text == "Request Error(0)":
+    #             self.refresh_frame()
 
     def check_current_bp(self):
         try:
-            curr_bp = self.driver.execute_script(
-                "return document.getElementById('top_bp_num').innerText")[0]
-            if curr_bp is not None:
+            if curr_bp := self.driver.execute_script(
+                    "return document.getElementById('top_bp_num').innerText")[0]:
                 return int(curr_bp)
 
         except JavascriptException:
             my_traceback()
-            if self.driver.find_element_by_id('gadget_contents').text == "Request Error(0)":
+            if self.driver.find_element_by_id(
+                    'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
             return None
 
@@ -175,8 +177,8 @@ class Bot:
             ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
 
     def find(self, search_type, search_value, parent=None):
-        loc = search_syntax_dic.get(search_type)
-        element = self.search_cycle(loc, search_value, parent)
+        locator = search_syntax_dic.get(search_type)
+        element = self.search_cycle(locator, search_value, parent)
         return element
 
     def wait_for(self, locator, value, t=5, parent=None):
@@ -199,7 +201,8 @@ class Bot:
     @property
     def get_bp_pot_count(self):
         self.click('class', 'top_menu_7')
-        btns = self.driver.find_elements_by_class_name('decision_button_column_2')
+        btns = self.driver.find_elements_by_class_name(
+            'decision_button_column_2')
         self.driver.execute_script("arguments[0].click();", btns[2])
 
         WebDriverWait(self.driver, 4).until(ec.staleness_of(btns[2]))
