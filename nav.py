@@ -51,15 +51,13 @@ def battle_to_event_stage(driver):
     WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
         (By.ID, 'hunt_result')))
 
-    try:
-        pts = driver.execute_script("return document.querySelector('#hunt_"
-                                    "result > div > div:nth-child(5) > div > "
-                                    "div:nth-child(6)');").text
-        pts = pts.split('\u3000')[-1]
-        taba_bot.print_temp(pts, False)
+    total_points = driver.execute_script("return app.tower.data.extra_pt")
+    total_points = int(total_points)
 
-    except Exception:
-        pass
+    print(f"total event points: {total_points:,}\n")
+
+    if total_points > 12500000:
+        raise ShopBreakException
 
     result = driver.find_element_by_id('hunt_result')
     close = result.find_element_by_class_name('closePopup')
