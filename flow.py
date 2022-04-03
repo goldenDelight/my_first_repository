@@ -71,8 +71,8 @@ def decision_tree(driver):
         WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
             (By.CLASS_NAME, 'quest_boss_status_1')))
         status = driver.find_elements_by_class_name('quest_boss_status_1')
-        name = status[0].text
-        if name is not None:
+
+        if name := status[0].text:
             driver.bot.boss_name = name
             output.boss_counter(driver.bot)
 
@@ -92,9 +92,9 @@ def decision_tree(driver):
     elif "Speed Demon" in driver.bot.boss_name:
         taba_bot.print_temp(f"speed demon in boss name is True")
 
-        if driver.bot.initial_bp_cooldown <= 10:
+        if bd_cd := driver.bot.initial_bp_cooldown <= 10:
             taba_bot.print_temp(f"bp cooldown <= 10 min")
-            time.sleep(60 * driver.bot.initial_bp_cooldown)
+            time.sleep(60 * bd_cd)
             stall(driver, False)
         else:
             taba_bot.print_temp(f"bp cooldown not <= 10 min")

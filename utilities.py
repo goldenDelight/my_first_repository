@@ -25,10 +25,7 @@ def sell_cards(driver):
             By.CLASS_NAME, 'decision_button_column_1')))
     sell_btn = driver.find_elements_by_class_name('decision_button_column_1')
 
-    for b in sell_btn:
-        if "Sell" in b.text:
-            driver.execute_script("arguments[0].click();", b)
-
+    [driver.execute_script("arguments[0].click();", b) for b in sell_btn if "Sell" in b.text]
     # batch select all N-tier cards
     WebDriverWait(driver, 4).until(
         ec.presence_of_all_elements_located((By.ID, 'card_image')))
@@ -36,7 +33,8 @@ def sell_cards(driver):
     Select(rarity_dropdown).select_by_index(1)
     driver.bot.click('id', 'button_bulk')
 
-    keep_xp(driver)
+    while xp_cards := [card.find_element_by_id('material_card_close') for card in driver.execute_script("return document.querySelectorAll('[id^=showcase_frame_]');") if card.find_element_by_id('material_card_image').get_attribute('src') == xp]:
+        driver.execute_script('arguments[0].click();', xp_cards.pop())
 
     driver.bot.click('id', 'button_sell_confirm')
     driver.bot.click('id', 'button_sell_result')
