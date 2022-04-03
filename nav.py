@@ -80,28 +80,22 @@ def battle_page(driver, slayer_event=False):
     if slayer_event or raid_boss_list(driver):
 
         try:
-            WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
-                (By.CLASS_NAME, 'friend_frame')))
+            WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, 'friend_frame')))
 
             friend_frames = driver.find_elements_by_class_name("friend_frame")
             ranking_frames = driver.find_elements_by_class_name("ranking_frame")
             container = driver.find_element_by_id("scroll_content")
-
             # for frame in friend_frames:
-            for frame in ranking_frames:
+            for frame in friend_frames:
                 driver.execute_script("arguments[0].scrollTop=arguments[1].offsetTop", container, frame)
                 info = frame.text.split('\n')
-
                 if driver.account.get('username') in info[-2]:
                     driver.execute_script("arguments[0].click();", frame)
                     WebDriverWait(driver, 3).until(ec.staleness_of(frame))
                     return driver.bot.page() == '/raid/boss_arrival'
-
         except (IndexError, TimeoutException):
             pass
-
         return False
-
     else:
         return False
 

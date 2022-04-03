@@ -109,10 +109,8 @@ def skip_animation(driver):
 
 
 def get_battle_results(driver):
-    battle_loss = ""
-    me_atk = "-1"
-    op_def = "-1"
-    op_name = "-1"
+    op_name, op_def, me_atk, battle_loss = -1
+
     points_frame = driver.execute_script(
         "return document.querySelector('#scroll_content2');")
     divs = points_frame.find_elements_by_tag_name('div')
@@ -134,9 +132,6 @@ def get_battle_results(driver):
                 loss = driver.bot.arena_event_loss_count
                 driver.bot.arena_event_loss_count = loss + 1
                 battle_loss = True
-                me_atk = -1
-                op_name = -1
-                op_def = -1
 
                 try:
                     me_atk = driver.execute_script("return document.querySelector('#main_frame_battle > a:nth-child(8) > div > div:nth-child(2) > div.result_attack_frame_lose');")
