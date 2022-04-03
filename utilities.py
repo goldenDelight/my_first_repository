@@ -11,8 +11,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import nav
 import taba_bot
 
-xp_card_png = 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b' \
-              '.73fcabcb223e0a96e48159015766757a.png '
+xp = 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b.73fcabcb223e0a96e48159015766757a.png'
 
 
 # batch sells 'N' class cards
@@ -23,6 +22,7 @@ def sell_cards(driver):
     WebDriverWait(driver, 4).until(
         ec.presence_of_all_elements_located((
             By.CLASS_NAME, 'decision_button_column_1')))
+
     sell_btn = driver.find_elements_by_class_name('decision_button_column_1')
 
     [driver.execute_script("arguments[0].click();", b) for b in sell_btn if "Sell" in b.text]
@@ -31,7 +31,8 @@ def sell_cards(driver):
         ec.presence_of_all_elements_located((By.ID, 'card_image')))
     rarity_dropdown = driver.find_element_by_id('select_filter_rare')
     Select(rarity_dropdown).select_by_index(1)
-    driver.bot.click('id', 'button_bulk')
+    bulk = driver.find_element_by_id('button_bulk')
+    driver.execute_script("arguments[0].click();", bulk)
 
     while xp_cards := [card.find_element_by_id('material_card_close') for card in driver.execute_script("return document.querySelectorAll('[id^=showcase_frame_]');") if card.find_element_by_id('material_card_image').get_attribute('src') == xp]:
         driver.execute_script('arguments[0].click();', xp_cards.pop())
@@ -44,22 +45,17 @@ def sell_cards(driver):
 
 # removes xp cards from the sell group
 def keep_xp(driver):
-    WebDriverWait(driver, 4).until(
-        ec.presence_of_all_elements_located((By.ID, 'material_card_image')))
+    print("keeping xp cards")
 
-    frames = driver.execute_script(
-        "return document.querySelectorAll('[id^=showcase_frame_]');")
-    for card in frames:
-        try:
-            card_tn = card.find_element_by_id('material_card_image')
-            tn_src = card_tn.get_attribute('src')
 
-            if tn_src == xp_card_png:
-                remove = card.find_element_by_id('material_card_close')
-                driver.execute_script('arguments[0].click();', remove)
-                keep_xp(driver)
-        except StaleElementReferenceException:
-            break
+    print("done keeping xp cards")
+
+
+# def find_xp(driver):
+#     # frames = driver.execute_script(
+#     #     "return document.querySelectorAll('[id^=showcase_frame_]');")
+#     return [card.find_element_by_id('material_card_close') for card in driver.execute_script(
+#         "return document.querySelectorAll('[id^=showcase_frame_]');") if card.find_element_by_id('material_card_image').get_attribute('src') == xp]
 
 
 def use_stam(driver, tower_event=False):
