@@ -1,4 +1,6 @@
+import sys
 import time
+import traceback
 
 from selenium.common.exceptions import (
     StaleElementReferenceException,
@@ -9,9 +11,9 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
-import taba_bot
 
 xp = 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b.73fcabcb223e0a96e48159015766757a.png'
+last_message = ""
 
 
 # batch sells 'N' class cards
@@ -41,21 +43,6 @@ def sell_cards(driver):
     driver.bot.click('id', 'button_sell_result')
 
     nav.main_page(driver)
-
-
-# removes xp cards from the sell group
-def keep_xp(driver):
-    print("keeping xp cards")
-
-
-    print("done keeping xp cards")
-
-
-# def find_xp(driver):
-#     # frames = driver.execute_script(
-#     #     "return document.querySelectorAll('[id^=showcase_frame_]');")
-#     return [card.find_element_by_id('material_card_close') for card in driver.execute_script(
-#         "return document.querySelectorAll('[id^=showcase_frame_]');") if card.find_element_by_id('material_card_image').get_attribute('src') == xp]
 
 
 def use_stam(driver, tower_event=False):
@@ -110,12 +97,12 @@ def do_bp(driver, event_grind=False):
         selector = Select(driver.find_element_by_class_name('selector'))
         owned = int(pots.text.split()[-1])
 
-        if event_grind == False:
+        if event_grind is False:
             selector.select_by_value("1")
             taba_bot.print_temp(f"{owned - 1:,} small bp pots left", False)
             driver.bot.click('class', 'decision_button_column_2')
 
-        elif event_grind == True:
+        elif event_grind is True:
             # if "6" in selector.first_selected_option.text:
             #     driver.bot.click('id', 'IT007')
             #     frame = driver.execute_script(
