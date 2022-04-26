@@ -60,8 +60,11 @@ def grind(driver):
                 "return document.querySelector('#canvas');")
             canvas.click()
         except AttributeError:
-            return_by_href = driver.bot.find_href('/hunt/hunt_start')
-            return_by_href.click()
+            try:
+                href = driver.bot.find_href('hunt_start')
+                href.click()
+            except AttributeError:
+                nav.main_page(driver)
     try:
 
         if driver.bot.page() == '/item/item_shop':

@@ -17,6 +17,9 @@ import output
 import stage
 import startup
 import taba_bot
+import tower_event
+import utilities
+import vanquish_event
 
 main_account = {"email": "11throwaway.23@gmail.com",
                 "password": "skateboard",
@@ -49,4 +52,22 @@ class CustomDriver(WebDriver):
             pass
 
     def make_new_bot(self):
+        from importlib import reload
+        reload(taba_bot)
+        reload(flow)
+        reload(utilities)
+        reload(gifts)
+        reload(battle)
+        reload(quest)
+        reload(nav)
+        reload(logic)
+        reload(output)
+        reload(tower_event)
+        reload(startup)
+        reload(discipline_module)
+        reload(battle_log)
+        reload(arena_event)
+        reload(vanquish_event)
+        reload(custom_exceptions)
+
         self.bot = taba_bot.Bot(self)

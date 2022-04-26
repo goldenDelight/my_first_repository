@@ -13,6 +13,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+
 from custom_exceptions import RequestError0
 
 search_syntax_dic = {
@@ -36,6 +37,8 @@ find_syntax_dic = {
 class Bot:
 
     def __init__(self, driver):
+        import utilities
+        utilities.last_message = ""
 
         self.driver = driver
 
@@ -60,7 +63,9 @@ class Bot:
 
     def page(self):
         try:
-            return self.driver.execute_script("return location_url")
+            page = self.driver.execute_script("return location_url")
+            # print(f"u at {page} bitch")
+            return page
 
         except JavascriptException:
             self.driver.switch_to.parent_frame()
@@ -91,17 +96,23 @@ class Bot:
         except NoSuchElementException:
             if self.driver.find_element_by_id(
                     'gadget_contents').text == "Request Error(0)":
-                raise RequestError0
+                self.refresh_frame()
 
         except TimeoutException:
+            from utilities import print_temp
             print_temp("element not stale")
 
         return None
 
     def find_href(self, substring):
-        href_query = "return document.querySelector('a[href*=" + substring + "]')"
-        element = self.search_cycle(href_query)
-        return element
+        WebDriverWait(self.driver, 3).until(
+            ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
+
+        anchors = self.driver.execute_script(f"return document.querySelectorAll('a')")
+
+        for a in anchors:
+            if substring in str(a.get_attribute('href')):
+                return a
 
     def find_substring(self, sub_str, parent=None):
         parent = self.driver if parent is None else parent
@@ -134,18 +145,19 @@ class Bot:
             time.sleep(0.1)
         return None
 
-    # def bp_cooldown(self):
-    #     try:
-    #         bp_text = self.driver.execute_script(
-    #             "return document.getElementById('bp_gage_time').innerText")[-2:]
-    #         cd = int(bp_text)
-    #         print(f"bp cooldown: {cd % 20}")
-    #         return cd % 20
-    #     except JavascriptException:
-    #         my_traceback()
-    #         if self.driver.find_element_by_id(
-    #                 'gadget_contents').text == "Request Error(0)":
-    #             self.refresh_frame()
+    def bp_cooldown(self):
+        try:
+            bp_text = self.driver.execute_script(
+                "return document.getElementById('bp_gage_time').innerText")[-2:]
+            cd = int(bp_text)
+            print(f"bp cooldown: {cd % 20}")
+            return cd % 20
+        except JavascriptException:
+            from utilities import my_traceback
+            my_traceback()
+            if self.driver.find_element_by_id(
+                    'gadget_contents').text == "Request Error(0)":
+                self.refresh_frame()
 
     def check_current_bp(self):
         try:
@@ -154,6 +166,7 @@ class Bot:
                 return int(curr_bp)
 
         except JavascriptException:
+            from utilities import my_traceback
             my_traceback()
             if self.driver.find_element_by_id(
                     'gadget_contents').text == "Request Error(0)":
@@ -161,6 +174,8 @@ class Bot:
             return None
 
         except WebDriverException:
+            from utilities import my_traceback, print_temp
+
             my_traceback()
             print_temp(
                 "Unable to get 'innerText' of undefined or null ref.", False)
