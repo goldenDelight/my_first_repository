@@ -16,14 +16,28 @@ from selenium.webdriver.support.wait import WebDriverWait
 import utilities
 import taba_bot
 
+# TODO:
+#  reformat summaries
+#   use a heading with the time with rest indented
+#   opponent name (with total win/loss count)
+#   opponent def
+#   my mean and median atk
+#   actual arena event points
+#   average arena points per BP spent
+#  avoid opponents I've lost to
+#  check for rank-up battle availability
+#  check/change decks based on fever/rank-up
 
-def initialize_module(driver):
+
+def grind(driver):
 
     if driver.switch_to.parent_frame():
         print("switched to parent frame\r")
     if WebDriverWait(driver, 10).until(
             ec.frame_to_be_available_and_switch_to_it((By.ID, "game_frame"))):
         print("switched to game frame\r")
+
+    pick_fight(driver)
 
 
 def pick_fight(driver):
