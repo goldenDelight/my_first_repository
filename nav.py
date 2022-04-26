@@ -51,12 +51,13 @@ def battle_to_event_stage(driver):
         (By.ID, 'hunt_result')))
 
     total_points = driver.execute_script("return app.tower.data.extra_pt")
-    total_points = int(total_points)
 
-    print(f"total event points: {total_points:,}\n")
+    if total_points is not None:
+        total_points = int(total_points)
+        print(f"total event points: {total_points:,}\n")
 
-    if total_points > 12500000:
-        raise ShopBreakException
+        if total_points > 18500000:
+            raise ShopBreakException
 
     result = driver.find_element_by_id('hunt_result')
     close = result.find_element_by_class_name('closePopup')
@@ -158,14 +159,9 @@ def event_page(driver):
 
 
 def event_stage(driver):
-    WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
-    anchors = driver.execute_script("return document.querySelectorAll('a');")
-    for a in anchors:
-        if a is not None and ((a.get_attribute('onClick') == 'app.back();') or (
-                'hunt_start' in a.get_attribute('href'))):
-            driver.execute_script("arguments[0].click();", a)
-            WebDriverWait(driver, 10).until(ec.staleness_of(a))
-            break
+    ref = driver.bot.find_href('hunt_start')
+    driver.execute_script("arguments[0].click();", ref)
+    WebDriverWait(driver, 10).until(ec.staleness_of(ref))
 
 
 def gifts(driver):

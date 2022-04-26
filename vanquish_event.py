@@ -15,46 +15,37 @@ from custom_exceptions import \
     ShopBreakException
 
 
+full_attack_AR = False
+
+
 def nav_to_event_splash(driver):
-    if '/hunt/hunt_event_top' not in driver.bot.page():
-        links = driver.execute_script("return document.querySelectorAll('a');")
-        for link in links:
-            if 'hunt_event_top' in link.get_attribute('href'):
-                driver.execute_script("arguments[0].click();", link)
-                break
+    if 'hunt_event_top' not in driver.bot.page():
+        ref = driver.bot.find_href('hunt_event_top')
+        driver.execute_script("arguments[0].click();", ref)
 
 
 def nav_to_boss_list(driver):
-    if '/hunt/raid_list' not in driver.bot.page():
-        links = driver.execute_script("return document.querySelectorAll('a');")
-        for link in links:
-            if '/hunt/raid_list' in link.get_attribute('href'):
-                driver.execute_script("arguments[0].click();", link)
-                break
+    if 'raid_list' not in driver.bot.page():
+        ref = driver.bot.find_href('raid_list')
+        driver.execute_script("arguments[0].click();", ref)
 
 
 def nav_to_boss(driver):
-    if '/raid/boss_arrival' not in driver.bot.page():
-        links = driver.execute_script("return document.querySelectorAll('a');")
-        for link in links:
-            if '/raid/boss_arrival' in link.get_attribute("href"):
-                driver.execute_script("arguments[0].click();", link)
-                break
+    if 'boss_arrival' not in driver.bot.page():
+        ref = driver.bot.find_href('boss_arrival')
+        driver.execute_script("arguments[0].click();", ref)
 
 
 def nav_to_stage(driver):
-    if '/hunt/hunt_start' not in driver.bot.page():
-        links = driver.execute_script("return document.querySelectorAll('a');")
-        for link in links:
-            if '/hunt/hunt_start' in link.get_attribute('href'):
-                driver.execute_script("arguments[0].click();", link)
-                break
+    if 'hunt_start' not in driver.bot.page():
+        ref = driver.bot.find_href('hunt_start')
+        driver.execute_script("arguments[0].click();", ref)
 
 
 def grind(driver):
     driver.bot.refocus_frame()
 
-    if driver.bot.page() == '/raid/boss_achievement':
+    if 'boss_achievement' in driver.bot.page():
         try:
             canvas = driver.execute_script(
                 "return document.querySelector('#canvas');")
@@ -67,36 +58,46 @@ def grind(driver):
                 nav.main_page(driver)
     try:
 
-        if driver.bot.page() == '/item/item_shop':
+        if 'item_shop' in driver.bot.page():
             raise ShopBreakException
 
-        if driver.bot.page() == '/raid/boss_arrival':
-            logic.fight(driver, slayer_event=True)
+        if 'boss_arrival' in driver.bot.page():
+            logic.fight(driver,
+                        slayer_event=True,
+                        full_attack_AR=full_attack_AR)
             nav.battle_to_event_stage(driver)
 
-        elif driver.bot.page() == '/hunt/hunt_start':
-            quest.grind(driver, slayer_event=True)
+        elif 'hunt_start' in driver.bot.page():
+            stage.grind(driver, slayer_event=True)
             nav.quest_to_boss_list(driver, slayer_event=True)
             nav.battle_page(driver, slayer_event=True)
-            logic.fight(driver, slayer_event=True)
+            logic.fight(driver,
+                        slayer_event=True,
+                        full_attack_AR=full_attack_AR)
             nav.battle_to_event_stage(driver)
 
-        elif driver.bot.page() == '/hunt/raid_list':
+        elif 'raid_list' in driver.bot.page():
             if nav.battle_page(driver, slayer_event=True):
-                logic.fight(driver, slayer_event=True)
+                logic.fight(driver,
+                            slayer_event=True,
+                            full_attack_AR=full_attack_AR)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.bot.page() == '/hunt/hunt_event_top':
+        elif 'hunt_event_top' in driver.bot.page():
             if check_for_boss(driver):
                 if nav.battle_page(driver, slayer_event=True):
-                    logic.fight(driver, slayer_event=True)
+                    logic.fight(driver,
+                                slayer_event=True,
+                                full_attack_AR=full_attack_AR)
                     nav.battle_to_event_stage(driver)
                 else:
                     nav.event_stage(driver)
                     stage.grind(driver, slayer_event=True)
                     nav.quest_to_boss_list(driver, slayer_event=True)
                     nav.battle_page(driver, slayer_event=True)
-                    logic.fight(driver, slayer_event=True)
+                    logic.fight(driver,
+                                slayer_event=True,
+                                full_attack_AR=full_attack_AR)
                     nav.battle_to_event_stage(driver)
 
             else:
@@ -104,13 +105,15 @@ def grind(driver):
                 stage.grind(driver, slayer_event=True)
                 nav.quest_to_boss_list(driver, slayer_event=True)
                 nav.battle_page(driver)
-                logic.fight(driver, slayer_event=True)
+                logic.fight(driver,
+                            slayer_event=True,
+                            full_attack_AR=full_attack_AR)
                 nav.battle_to_event_stage(driver)
 
-        elif driver.bot.page() == '/mypage/index':
+        elif 'index' in driver.bot.page():
             nav.event_page(driver)
 
-        elif driver.bot.page() == '/card/card_max':
+        elif 'card_max' in driver.bot.page():
             utilities.sell_cards(driver)
             nav.event_page(driver)
             check_for_boss(driver)
@@ -138,34 +141,3 @@ def check_for_boss(driver):
             AttributeError,
             JavascriptException):
         return False
-
-
-def grind_routine(driver):
-    import nav
-    import quest
-
-    try:
-        if driver.bot.page() == '/item/item_shop':
-            raise ShopBreakException
-
-        if nav.battle_page(driver):
-            nav.boss_recon(driver)
-
-        else:
-            nav.quest(driver)
-            quest.grind(driver)
-            nav.quest_to_boss_list(driver)
-            nav.battle_page(driver)
-            nav.boss_recon(driver)
-
-    except TimeoutException:
-        pass
-    except RequestError0:
-        driver.bot.refresh_frame()
-    except MaxCardLimitException:
-        utilities.sell_cards(driver)
-    except JavascriptException:
-        driver.switch_to.parent_frame()
-        WebDriverWait(driver, 10).until(
-                ec.frame_to_be_available_and_switch_to_it(
-                    (By.ID, 'game_frame')))

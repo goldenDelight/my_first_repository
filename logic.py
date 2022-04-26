@@ -17,7 +17,7 @@ import utilities
 import taba_bot
 
 
-def fight(driver, slayer_event=False):
+def fight(driver, slayer_event=False, full_attack_AR=False):
     """
     :param driver:
     :param slayer_event:
@@ -32,12 +32,11 @@ def fight(driver, slayer_event=False):
         name = WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((
                 By.CLASS_NAME, 'quest_boss_status_1')))
-        if "(AR)" in name.text:
+        if (full_attack_AR and "(AR)") or "(Hell)" in name.text:
             if bp < 3:
                 battle.full_attack(driver)
                 WebDriverWait(driver, 3).until(
-                    ec.visibility_of_element_located((
-                        By.ID, 'modal-win-inner')))
+                    ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
                 utilities.do_bp(driver, slayer_event)
                 battle.full_attack(driver)
                 taba_bot.print_temp("fully attacking", False)
@@ -74,7 +73,7 @@ def fight(driver, slayer_event=False):
             skip_animation(driver)
 
             import battle_log
-            battle_log.track_battle(driver)
+            battle_log.track_slayer_battle(driver)
 
             if driver.bot.page() == '/raid/boss_fail/':
                 nav.defeat_retry(driver)
