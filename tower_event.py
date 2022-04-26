@@ -8,7 +8,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
-import taba_bot
 from custom_exceptions import ShopBreakException
 
 

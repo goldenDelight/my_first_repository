@@ -1,5 +1,3 @@
-import time
-
 from selenium.common.exceptions import (
     TimeoutException,
     JavascriptException,
@@ -14,7 +12,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 import battle
 import nav
 import utilities
-import taba_bot
 
 
 def fight(driver, slayer_event=False, full_attack_AR=False):
