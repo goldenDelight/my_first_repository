@@ -4,6 +4,17 @@ from selenium.common.exceptions import (
     ElementNotInteractableException)
 from selenium.webdriver.chrome.webdriver import WebDriver
 
+import arena_event
+import battle
+import battle_log
+import custom_exceptions
+import discipline_module
+import quest
+import gifts
+import logic
+import nav
+import output
+import stage
 import startup
 import taba_bot
 

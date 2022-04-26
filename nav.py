@@ -9,9 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-import taba_bot
+import utilities
 from custom_exceptions import (MaxCardLimitException,
-                               RequestError0,
                                ShopBreakException)
 
 
@@ -141,7 +140,7 @@ def quest(driver):
 
     except NoSuchElementException:
         if driver.find_element_by_id('gadget_contents').text == "Request Error(0)":
-            raise RequestError0
+            driver.bot.refresh_frame()
     except MaxCardLimitException:
         raise MaxCardLimitException
 
@@ -186,7 +185,8 @@ def unclaimed_gifts(driver):
         gifts_button = driver.find_element_by_class_name('button-present')
         icon_url = gifts_button.get_attribute('style').split('"')[1]
         return 'present_2' in icon_url
-
+    except NoSuchElementException:
+        print("no such gift button exception")
     except AttributeError:
         taba_bot.my_traceback()
     except StaleElementReferenceException:

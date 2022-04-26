@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import logic
 import nav
-import quest
+import stage
 import utilities
 
 from custom_exceptions import \
@@ -90,7 +90,7 @@ def grind(driver):
                     nav.battle_to_event_stage(driver)
                 else:
                     nav.event_stage(driver)
-                    quest.grind(driver, slayer_event=True)
+                    stage.grind(driver, slayer_event=True)
                     nav.quest_to_boss_list(driver, slayer_event=True)
                     nav.battle_page(driver, slayer_event=True)
                     logic.fight(driver, slayer_event=True)
@@ -98,7 +98,7 @@ def grind(driver):
 
             else:
                 nav.event_stage(driver)
-                quest.grind(driver, slayer_event=True)
+                stage.grind(driver, slayer_event=True)
                 nav.quest_to_boss_list(driver, slayer_event=True)
                 nav.battle_page(driver)
                 logic.fight(driver, slayer_event=True)

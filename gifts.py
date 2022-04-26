@@ -2,8 +2,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-import taba_bot
-
 m = "gifts"
 
 
@@ -36,3 +34,19 @@ def get_gifts(driver):
     driver.bot.click('class', 'back_button_column_1')
     driver.bot.boss_name = None
     print("driver.bot.boss_name = None")
+
+# event rank elements
+#
+# main page 'rank rewards available' gifts button icon
+# background-image: url("https://cf.tna.dmmgames.com/img/pc/system/button/present_Event_Rewards_NEW.png"); opacity: 1;
+#
+# gifts landing page href to collect event rewards
+# href="/event_ranking_reward/index"
+#
+# event rank reward page
+# '/event_ranking_reward/index'
+#
+# href="/event_ranking_reward/send_all_to_gift"
+#
+# element displaying final event rank on the rewards page
+# <div id="rank"> (int) </div>

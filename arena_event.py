@@ -1,20 +1,13 @@
 import time
 
 from selenium.common.exceptions import (
-    StaleElementReferenceException,
-    NoSuchElementException,
-    ElementClickInterceptedException,
-    ElementNotInteractableException,
-    UnexpectedAlertPresentException,
-    TimeoutException, JavascriptException)
+    TimeoutException)
 from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 import utilities
-import taba_bot
 
 # TODO:
 #  reformat summaries
@@ -123,7 +116,10 @@ def skip_animation(driver):
 
 
 def get_battle_results(driver):
-    op_name, op_def, me_atk, battle_loss = -1
+    op_name = -1
+    op_def = -1
+    me_atk = -1
+    battle_loss = -1
 
     points_frame = driver.execute_script(
         "return document.querySelector('#scroll_content2');")

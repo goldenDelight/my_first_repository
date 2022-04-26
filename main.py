@@ -1,11 +1,11 @@
-import time
 from threading import Thread
 
 from selenium.common.exceptions import (StaleElementReferenceException)
-import flow
+
+import custom_driver
+import quest
 import tower_event
 from custom_exceptions import ShopBreakException
-import custom_driver
 
 
 def alt_thread(driver):
@@ -13,11 +13,11 @@ def alt_thread(driver):
     while True:
         try:
             flow.vanquish_event(driver)
-            tower_event.tower_event_grind(driver)
-            flow.grind_routine(driver)
-            # tower_event_grind(driver)
+            tower_event.grind(driver)
+            flow.grind(driver)
+            # grind(driver)
             # flow.event_grind(driver)
-            flow.grind_routine(driver)
+            flow.grind(driver)
         except StaleElementReferenceException:
             pass
         except ShopBreakException:

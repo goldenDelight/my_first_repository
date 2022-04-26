@@ -82,4 +82,4 @@ def req_assist(driver):
             taba_bot.print_temp("assist already requested")
         elif driver.find_element_by_id(
                 'gadget_contents').text == "Request Error(0)":
-            raise RequestError0
+            driver.bot.refresh_frame()

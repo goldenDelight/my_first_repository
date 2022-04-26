@@ -1,5 +1,4 @@
 import json
-import io
 
 
 def track_battle(driver):

@@ -12,7 +12,7 @@ import taba_bot
 from custom_exceptions import ShopBreakException
 
 
-def tower_event_grind(driver):
+def grind(driver):
 
     if driver.bot.page() == '/mypage/index':
         nav.event_page(driver)
