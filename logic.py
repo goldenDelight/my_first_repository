@@ -35,11 +35,9 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
                 WebDriverWait(driver, 3).until(
                     ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
                 utilities.do_bp(driver, slayer_event)
-                battle.full_attack(driver)
-                taba_bot.print_temp("fully attacking", False)
-            else:
-                battle.full_attack(driver)
-                taba_bot.print_temp("fully attacking", False)
+
+            battle.full_attack(driver)
+            utilities.print_temp("fully attacking", False)
 
         elif bp < 1:
             battle.weak_attack(driver)
@@ -47,10 +45,10 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
                 ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
             utilities.do_bp(driver, slayer_event)
             battle.weak_attack(driver)
-            taba_bot.print_temp("weakly attacking", False)
+            utilities.print_temp("weakly attacking", False)
         else:
             battle.weak_attack(driver)
-            taba_bot.print_temp("weakly attacking", False)
+            utilities.print_temp("weakly attacking", False)
 
     except NoSuchElementException:
         pass
@@ -63,7 +61,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
     except (WebDriverException,
             JavascriptException,
             AttributeError):
-        taba_bot.my_traceback()
+        utilities.my_traceback()
 
     finally:
         if slayer_event:
@@ -99,7 +97,7 @@ def skip_animation(driver):
         except (TimeoutException,
                 AttributeError,
                 MoveTargetOutOfBoundsException):
-            taba_bot.my_traceback()
+            utilities.my_traceback()
             break
     print("\n")
     # taba_bot.print_temp("skip animation: success")

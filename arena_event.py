@@ -62,7 +62,7 @@ def pick_fight(driver):
         skip_animation(driver)
         get_battle_results(driver)
     except TimeoutException:
-        taba_bot.print_temp("timed out :(")
+        utilities.print_temp("timed out :(")
 
     finally:
         import nav
@@ -161,17 +161,17 @@ def get_battle_results(driver):
             average = ((total+pts)/(count+1))
 
             if battle_loss:
-                taba_bot.print_temp(f"my atk: {me_atk}", temp=False)
-                taba_bot.print_temp(f"op def: {op_def} ({op_name})", temp=False)
-                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
-                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
-                taba_bot.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
+                utilities.print_temp(f"my atk: {me_atk}", temp=False)
+                utilities.print_temp(f"op def: {op_def} ({op_name})", temp=False)
+                utilities.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
+                utilities.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
+                utilities.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
                 break
             else:
                 # taba_bot.print_temp(f"win margin: {me_atk - op_def}", temp=False)
-                taba_bot.print_temp(f"arena_pts: {pts}", temp=False)
-                taba_bot.print_temp(f"arena_pts_total: {driver.bot.arena_event_points}", temp=False)
-                taba_bot.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
-                taba_bot.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
-                taba_bot.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
+                utilities.print_temp(f"arena_pts: {pts}", temp=False)
+                utilities.print_temp(f"arena_pts_total: {driver.bot.arena_event_points}", temp=False)
+                utilities.print_temp(f"arena_fight_count: {driver.bot.arena_event_fight_count}", temp=False)
+                utilities.print_temp(f"arena_loss_count: {driver.bot.arena_event_loss_count}", temp=False)
+                utilities.print_temp(f"pts/fight: {int(average)}\n\n", temp=False)
                 break

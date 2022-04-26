@@ -34,7 +34,7 @@ def grind(driver):
                     points_str = info_lines[2]
                     points_int: int = points_str.split()[-1]
 
-                    taba_bot.print_temp(f"points: {points_int:,}")
+                    utilities.print_temp(f"points: {points_int:,}")
 
                     if points_int >= 8000000:
                         raise ShopBreakException

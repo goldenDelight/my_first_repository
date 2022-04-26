@@ -1,7 +1,5 @@
-import time
 import re
-import sys
-import traceback
+import time
 
 from selenium.common.exceptions import (
     TimeoutException,
@@ -13,8 +11,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-
-from custom_exceptions import RequestError0
 
 search_syntax_dic = {
     'css': By.CSS_SELECTOR,
@@ -231,27 +227,3 @@ class Bot:
         return None
 
 
-def my_traceback():
-    exc_type, exc_value, exc_traceback = sys.exc_info()
-    print_temp(traceback.print_exception(exc_type, exc_value, exc_traceback,
-                                         limit=4, file=sys.stdout))
-    return None
-
-
-def animated_text(stall_text, wait=26, interval=1):
-    for c in range(wait):
-        print(stall_text, end='\r')
-        if stall_text.__len__() == 13:
-            stall_text = "stalling"
-        else:
-            stall_text += "."
-        import time
-        time.sleep(interval)
-    return None
-
-
-def print_temp(_str, temp=True):
-    import time
-    linebreak = '\r' if temp else '\n'
-    print(f"{time.strftime('%H:%M:%S')} {_str}", end=linebreak, flush=True)
-    return None

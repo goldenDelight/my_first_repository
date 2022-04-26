@@ -65,7 +65,7 @@ def use_stam(driver, tower_event=False):
         driver.execute_script("arguments[0].click();", use_pots)
         WebDriverWait(driver, 3).until(ec.staleness_of(use_pots))
     except TimeoutException:
-        taba_bot.my_traceback()
+        my_traceback()
     time.sleep(0.5)
     time.sleep(1.5)
     try:
@@ -75,13 +75,13 @@ def use_stam(driver, tower_event=False):
             "return document.querySelector('a[href*=use_action]')")
         driver.execute_script("arguments[0].click();", confirm)
     except TimeoutException:
-        taba_bot.my_traceback()
+        my_traceback()
 
     try:
         driver.bot.click('class', 'back_button_column_1')
 
     except (TimeoutException, StaleElementReferenceException):
-        taba_bot.my_traceback()
+        my_traceback()
     WebDriverWait(driver, 5).until(
         ec.presence_of_element_located((By.ID, 'loader')))
     time.sleep(0.5)
@@ -99,7 +99,7 @@ def do_bp(driver, event_grind=False):
 
         if event_grind is False:
             selector.select_by_value("1")
-            taba_bot.print_temp(f"{owned - 1:,} small bp pots left", False)
+            print_temp(f"{owned - 1:,} small bp pots left", False)
             driver.bot.click('class', 'decision_button_column_2')
 
         elif event_grind is True:
@@ -111,95 +111,53 @@ def do_bp(driver, event_grind=False):
             #     pots_left = owned_pots - 1
             #     taba_bot.print_temp(f"{pots_left} full bp pots left", False)
             # else:
-                taba_bot.print_temp(f"{owned - 6:,} bp pots left", False)
+                print_temp(f"{owned - 6:,} bp pots left", False)
                 driver.bot.click('class', 'decision_button_column_2')
 
         driver.bot.click('class', 'decision_button_column_2')
         driver.bot.click('class', 'back_button_column_1')
     except JavascriptException:
-        taba_bot.my_traceback()
+        my_traceback()
 
 
-def card_limit_popup(driver):
-    # list of 'button' elements by css selector
-    decision_buttons_list = driver.execute_script(
-        "return document.querySelectorAll('.decision_button_column_1')")
+def name_is(func):
+    import time
 
-    # iterate thru text of each button
-    # clicks one called 'Sell Cards'
-    for label in decision_buttons_list:
-        if "Sell Cards" in label.text:
-            driver.execute_script("arguments[0].click();", label)
+    def wrap(*args, **kwargs):
+        global last_message
+        result = func(*args, **kwargs)
 
+        if f"{time.strftime('%H:%M:%S')} {func.__name__}" != last_message:
+            last_message = f"{time.strftime('%H:%M:%S')} {func.__name__}"
+            print(last_message)
+        return result
 
-def use_pot(driver):
-    print("using pot\r")
-    try:
-        small_pot = driver.execute_script(
-            "return document.querySelector('a[href*=use_confirm]');")
-        driver.execute_script("arguments[0].click();", small_pot)
-
-        WebDriverWait(driver, 3).until(ec.staleness_of(small_pot))
-
-        small_pot = driver.execute_script(
-            "return document.querySelector('a[href*=use_action]');")
-        driver.execute_script("arguments[0].click();", small_pot)
-
-        WebDriverWait(driver, 3).until(ec.staleness_of(small_pot))
-
-        return_ = driver.execute_script(
-            "return document.querySelector('.back_button_column_1');")
-        driver.execute_script("arguments[0].click();", return_)
-
-        WebDriverWait(driver, 3).until(ec.staleness_of(return_))
-
-    except AttributeError:
-        taba_bot.my_traceback()
-        return False
-
-    return True
+    return wrap
 
 
-def restore_stam(self):
-    use_small_stams = self.execute_script(
-        'return document.querySelectorAll(\'.decision_button_column_2')
-    self.execute_script("arguments[0].click();", use_small_stams[0])
-
-    WebDriverWait(self, 3).until(ec.staleness_of(use_small_stams))
-
-    confirm_use = self.find_element_by_css_selector(
-        '#main_frame_item > div:nth-child(5) > a:nth-child(1)')
-    self.execute_script("arguments[0].click();", confirm_use)
-
-    WebDriverWait(self, 3).until(ec.staleness_of(confirm_use))
-
-    return_to_event = self.find_element_by_css_selector(
-        '#main_frame_item > div:nth-child(5) > a:nth-child(1)')
-    self.execute_script("arguments[0].click();", return_to_event)
-
-    WebDriverWait(self, 3).until(ec.staleness_of(return_to_event))
-
-#     locate, click last button to return to grind_routine
-    all_anchors = self.execute_script("return document.querySelectorAll('a');")
-    for a in all_anchors:
-        href = a.get_attribute('href')
-        if '/tower/tower_start' in href:
-            self.execute_script("arguments[0].click();", a)
+def animated_text(stall_text, wait=26, interval=1):
+    for c in range(wait):
+        print(stall_text, end='\r')
+        if stall_text.__len__() == 13:
+            stall_text = "stalling"
+        else:
+            stall_text += "."
+        import time
+        time.sleep(interval)
+    return None
 
 
-def card_sales(driver):
-    driver.execute_script("return document.querySelector('#numbner_of_card');")
-    bulk = driver.execute_script("return document.querySelector('#button_bulk');")
-    driver.execute_script("arguments[0].click();", bulk)
+def print_temp(_str, temp=True):
+    import time
+    linebreak = '\r' if temp else '\n'
+    print(f"{time.strftime('%H:%M:%S')} {_str}", end=linebreak, flush=True)
+    return None
 
 
-def screen_cards(driver):
-    cards_to_sell = driver.execute_script("return document.querySelectorAll('div[id^=showcase_frame]');")
+def my_traceback():
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    print_temp(traceback.print_exception(exc_type, exc_value, exc_traceback,
+                                         limit=4, file=sys.stdout))
+    return None
 
-    for card in cards_to_sell:
-        info = driver.execute_script("return arguments[0].querySelectorAll('*');", card)
-        for i in info:
-            if i.get_attribute('src') == 'https://cf.tna.dmmgames.com/img/common/card/S/C00040b.' \
-                                         '73fcabcb223e0a96e48159015766757a.png':
-                print(i.get_attribute('id'))
-                print(cards_to_sell.index(card))
+

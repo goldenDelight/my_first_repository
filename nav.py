@@ -148,14 +148,10 @@ def quest(driver):
 
 # noinspection PyBroadException
 def event_page(driver):
-    try:
-        main_page(driver)
-        driver.bot.click('css', '#main_frame > a:nth-child(7)')
-        return True
-    except Exception:
-        taba_bot.my_traceback()
-
-    return False
+    ref = driver.bot.find_href('hunt_event_top')
+    driver.execute_script("arguments[0].click();", ref)
+    WebDriverWait(driver, 10).until(ec.staleness_of(ref))
+    return True
 
 
 def event_stage(driver):
@@ -184,9 +180,9 @@ def unclaimed_gifts(driver):
     except NoSuchElementException:
         print("no such gift button exception")
     except AttributeError:
-        taba_bot.my_traceback()
+        utilities.my_traceback()
     except StaleElementReferenceException:
-        taba_bot.my_traceback()
+        utilities.my_traceback()
     except TimeoutException:
         if driver.find_element_by_id(
                 'gadget_contents').text == 'Request Error(0)':
@@ -198,7 +194,7 @@ def boss_recon(driver):
         (By.CLASS_NAME, 'quest_boss_status_1')))
     name = status[0].text
     if "(AR)" in name:
-        taba_bot.print_temp("fighting AR", False)
+        utilities.print_temp("fighting AR", False)
 
     if driver.bot.boss_name is None:
         driver.bot.boss_name = name
