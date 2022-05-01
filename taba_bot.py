@@ -208,22 +208,3 @@ class Bot:
                 pass
 
         return element
-
-    @property
-    def get_bp_pot_count(self):
-        self.click('class', 'top_menu_7')
-        btns = self.driver.find_elements_by_class_name(
-            'decision_button_column_2')
-        self.driver.execute_script("arguments[0].click();", btns[2])
-
-        WebDriverWait(self.driver, 4).until(ec.staleness_of(btns[2]))
-
-        items = self.driver.find_elements_by_class_name('item_shop_description')
-        self.driver.bp_pot_count = re.sub('[^0-9]', "", items[16].text)
-        print(self.driver.bp_pot_count)
-
-        if self.driver.starting_bp_pots_count is None:
-            self.starting_bp_pots_count = self.bp_pot_count
-        return None
-
-
