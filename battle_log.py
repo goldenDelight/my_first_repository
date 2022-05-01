@@ -14,7 +14,7 @@ def track_slayer_battle(driver):
     if stats.get('player_hp') != stats.get('player_hp_last'):
         print(f"  hp left: {stats.get('player_hp_last'):,}\n")
 
-    with open("battle_log.txt", 'a') as f:
+    with open("logs/battle_log.txt", 'a') as f:
         json.dump(stats, f)
         f.write("\n")
 
