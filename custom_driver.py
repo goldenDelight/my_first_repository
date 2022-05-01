@@ -54,7 +54,7 @@ class CustomDriver(WebDriver):
     def make_new_bot(self):
         from importlib import reload
         reload(taba_bot)
-        reload(flow)
+        reload(stage)
         reload(utilities)
         reload(gifts)
         reload(battle)
