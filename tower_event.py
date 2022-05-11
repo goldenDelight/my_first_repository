@@ -14,7 +14,7 @@ from custom_exceptions import ShopBreakException
 def grind(driver):
 
     if driver.bot.page() == '/mypage/index':
-        nav.event_page(driver)
+        nav.event_page(driver, "tower")
     elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 

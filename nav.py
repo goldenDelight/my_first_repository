@@ -147,8 +147,12 @@ def quest(driver):
 
 
 # noinspection PyBroadException
-def event_page(driver):
-    ref = driver.bot.find_href('hunt_event_top')
+def event_page(driver, event="hunt"):
+    if "tower" in event:
+        ref = driver.bot.find_href('tower_event_top')
+    else:
+        ref = driver.bot.find_href('hunt_event_top')
+
     driver.execute_script("arguments[0].click();", ref)
     WebDriverWait(driver, 10).until(ec.staleness_of(ref))
     return True
