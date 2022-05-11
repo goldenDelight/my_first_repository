@@ -3,6 +3,7 @@ from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException)
 from selenium.webdriver.chrome.webdriver import WebDriver
+# from seleniumwire import webdriver
 
 import arena_event
 import battle
