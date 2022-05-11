@@ -22,7 +22,7 @@ def boss_counter(driver):
 
     print(f"\n\n{time.strftime('%m/%d %H:%M:%S')}\n{driver.bot.boss_name}:"
           f"\n\n\tSpeed Demon: {rate(driver.bot.demon_count)}"
-          f"\n\tRed Oni: {rate(driver.bot.oni_count)}"
+          f"\n\tRed Oni: {rate(driver.bot.oni_count)} (1 : {ratio(driver)})"
           f"\n\tDark Beast: {rate(driver.bot.beast_count)}"
           f"\n\tFulst: {rate(driver.bot.fulst_count)}"
           f"\n\tYatsu: {rate(driver.bot.yatsu_count)}"
@@ -42,3 +42,15 @@ def rate(encounters):
         return f"{e} (every {int(avg_diff/60)} min)"
     else:
         return 0
+
+
+def ratio(driver):
+
+    encounter_count = driver.bot.demon_count.__len__() + \
+                      driver.bot.beast_count.__len__() + \
+                      driver.bot.fulst_count.__len__() + \
+                      driver.bot.yatsu_count.__len__() + \
+                      driver.bot.oni_count.__len__()
+
+    oni_ratio = "{:.2f}".format(encounter_count / driver.bot.oni_count.__len__())
+    return oni_ratio
