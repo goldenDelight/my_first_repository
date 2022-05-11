@@ -19,7 +19,7 @@ def boss_alert(driver):
         try:
             WebDriverWait(driver, 3).until(
                 ec.element_to_be_clickable((By.ID, 'boss_alerts_1')))
-            alert = driver.find_element_by_id('boss_alerts_1')
+            alert = driver.find_element(By.ID, 'boss_alerts_1')
             return alert is not None
         except (JavascriptException, TimeoutException):
             return False
@@ -46,6 +46,17 @@ def slayer_event_page(driver):
 
 
 # Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
+# Only for Slayer Events
 def battle_to_event_stage(driver):
     WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
         (By.ID, 'hunt_result')))
@@ -56,7 +67,7 @@ def battle_to_event_stage(driver):
         total_points = int(total_points)
         print(f"total event points: {total_points:,}\n")
 
-        if total_points > 18500000:
+        if total_points > 20500000:
             raise ShopBreakException
 
     result = driver.find_element_by_id('hunt_result')
@@ -80,9 +91,9 @@ def battle_page(driver, slayer_event=False):
         try:
             WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located((By.CLASS_NAME, 'friend_frame')))
 
-            friend_frames = driver.find_elements_by_class_name("friend_frame")
-            ranking_frames = driver.find_elements_by_class_name("ranking_frame")
-            container = driver.find_element_by_id("scroll_content")
+            friend_frames = driver.find_elements(By.CLASS_NAME, "friend_frame")
+            ranking_frames = driver.find_elements(By.CLASS_NAME, "ranking_frame")
+            container = driver.find_element(By.ID, "scroll_content")
             # for frame in friend_frames:
             for frame in friend_frames:
                 driver.execute_script("arguments[0].scrollTop=arguments[1].offsetTop", container, frame)
@@ -100,7 +111,7 @@ def battle_page(driver, slayer_event=False):
 
 def quest_to_boss_list(driver, slayer_event=False):
     if slayer_event or driver.bot.page() == '/quest/quest_start':
-        cvs = driver.find_element_by_id('canvas')
+        cvs = driver.find_element(By.ID, 'canvas')
         ActionChains(driver).move_to_element_with_offset(
             driver.find_element_by_id(
                 'gadget_contents'), 200, 300).click().perform()
@@ -130,17 +141,17 @@ def quest(driver):
             raise MaxCardLimitException
 
         WebDriverWait(driver, 3).until(ec.presence_of_element_located((By.ID,'chapter1')))
-        chapter1 = driver.find_element_by_id("chapter1")
+        chapter1 = driver.find_element(By.ID, "chapter1")
         driver.execute_script("arguments[0].click()", chapter1)
 
         WebDriverWait(driver, 3).until(ec.presence_of_element_located((By.ID, 'stage1-link')))
-        stage1 = driver.find_element_by_id('stage1-link')
+        stage1 = driver.find_element(By.ID, 'stage1-link')
         driver.execute_script("arguments[0].click()", stage1)
 
         WebDriverWait(driver, 3).until(ec.visibility_of_element_located((By.ID, 'canvas')))
 
     except NoSuchElementException:
-        if driver.find_element_by_id('gadget_contents').text == "Request Error(0)":
+        if driver.find_element(By.ID, 'gadget_contents').text == "Request Error(0)":
             driver.bot.refresh_frame()
     except MaxCardLimitException:
         raise MaxCardLimitException
@@ -178,7 +189,7 @@ def unclaimed_gifts(driver):
     try:
         WebDriverWait(driver, 3).until(ec.visibility_of_element_located(
             (By.CLASS_NAME, 'button-present')))
-        gifts_button = driver.find_element_by_class_name('button-present')
+        gifts_button = driver.find_element(By.CLASS_NAME, 'button-present')
         icon_url = gifts_button.get_attribute('style').split('"')[1]
         return 'present_2' in icon_url
     except NoSuchElementException:
@@ -188,8 +199,7 @@ def unclaimed_gifts(driver):
     except StaleElementReferenceException:
         utilities.my_traceback()
     except TimeoutException:
-        if driver.find_element_by_id(
-                'gadget_contents').text == 'Request Error(0)':
+        if driver.find_element(By.ID, 'gadget_contents').text == 'Request Error(0)':
             driver.bot.refresh_frame()
 
 

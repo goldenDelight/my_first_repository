@@ -90,7 +90,7 @@ class Bot:
             WebDriverWait(self.driver, 3).until(ec.staleness_of(element))
 
         except NoSuchElementException:
-            if self.driver.find_element_by_id(
+            if self.driver.find_element(By.ID,
                     'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
 
@@ -115,7 +115,7 @@ class Bot:
         try:
             WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
                 (By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
-            return parent.find_element_by_xpath(
+            return parent.find_element(By.XPATH,
                 f"//*[contains(text(), '{sub_str}')]")
         except TimeoutException:
             return None
@@ -151,7 +151,7 @@ class Bot:
         except JavascriptException:
             from utilities import my_traceback
             my_traceback()
-            if self.driver.find_element_by_id(
+            if self.driver.find_element(By.ID,
                     'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
 
@@ -164,7 +164,7 @@ class Bot:
         except JavascriptException:
             from utilities import my_traceback
             my_traceback()
-            if self.driver.find_element_by_id(
+            if self.driver.find_element(By.ID,
                     'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
             return None

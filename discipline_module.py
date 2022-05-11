@@ -1,6 +1,7 @@
 import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -65,7 +66,7 @@ def skip_animation(driver):
     while driver.bot.page() == '/compose/compose_index':
         try:
             ActionChains(driver).move_to_element_with_offset(
-                driver.find_element_by_id("gadget_contents"), 450, 675).click().perform()
+                driver.find_element(By.ID, "gadget_contents"), 450, 675).click().perform()
 
             time.sleep(0.5)
 

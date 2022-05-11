@@ -17,9 +17,9 @@ def claim_all(driver):
     try:
         WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
-        popup = driver.find_element_by_id('modal-win-inner')
+        popup = driver.find_element(By.ID, 'modal-win-inner')
 
-        c = popup.find_element_by_tag_name('a')
+        c = popup.find_element(By.TAG_NAME, 'a')
         driver.execute_script("arguments[0].click();", c)
 
     except Exception: pass

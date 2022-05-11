@@ -16,12 +16,11 @@ def game_start(driver):
             WebDriverWait(driver, 3).until(
                 ec.element_to_be_clickable((By.CLASS_NAME, 'game_start_over')))
 
-            start_btn = driver.find_element_by_class_name('game_start_over')
+            start_btn = driver.find_element(By.CLASS_NAME, 'game_start_over')
             driver.execute_script("arguments[0].click();", start_btn)
             break
         except TimeoutException:
-            if driver.find_element_by_id(
-                    'gadget_contents').text == "Request Error(0)":
+            if driver.find_element(By.ID, 'gadget_contents').text == "Request Error(0)":
                 driver.execute_script("gadgets.util.runOnLoadHandlers();")
 
 
@@ -35,7 +34,7 @@ def log_in(driver):
     password = None
 
     # locate account email and password entry fields
-    for i in driver.find_elements_by_tag_name('input'):
+    for i in driver.find_elements(By.TAG_NAME, 'input'):
         if 'Email' in i.get_attribute('placeholder'):
             email = i
         elif 'Password' in i.get_attribute('placeholder'):

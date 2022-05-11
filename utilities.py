@@ -24,22 +24,22 @@ def sell_cards(driver):
     WebDriverWait(driver, 4).until(
         ec.presence_of_all_elements_located((
             By.CLASS_NAME, 'decision_button_column_1')))
-    sell_btn = driver.find_elements_by_class_name('decision_button_column_1')
+    sell_btn = driver.find_elements(By.CLASS_NAME, 'decision_button_column_1')
     [driver.execute_script("arguments[0].click();", b) for b in sell_btn if "Sell" in b.text]
 
     # batch select all N-tier cards
     WebDriverWait(driver, 4).until(
         ec.presence_of_all_elements_located((By.ID, 'card_image')))
 
-    rarity_dropdown = driver.find_element_by_id('select_filter_rare')
+    rarity_dropdown = driver.find_element(By.ID, 'select_filter_rare')
     Select(rarity_dropdown).select_by_index(1)
-    bulk = driver.find_element_by_id('button_bulk')
+    bulk = driver.find_element(By.ID, 'button_bulk')
     driver.execute_script("arguments[0].click();", bulk)
 
-    while xp_cards := [card.find_element_by_id('material_card_close')
+    while xp_cards := [card.find_element(By.ID, 'material_card_close')
                        for card
                        in driver.execute_script("return document.querySelectorAll('[id^=showcase_frame_]');")
-                       if card.find_element_by_id('material_card_image').get_attribute('src') == xp]:
+                       if card.find_element(By.ID, 'material_card_image').get_attribute('src') == xp]:
 
         driver.execute_script('arguments[0].click();', xp_cards.pop())
 
@@ -98,7 +98,7 @@ def do_bp(driver, event_grind=False):
                                      'div:nth-child(7) > div:nth-child(4) > '
                                      'form > div:nth-child(2) > '
                                      'div:nth-child(1)\');')
-        selector = Select(driver.find_element_by_class_name('selector'))
+        selector = Select(driver.find_element(By.CLASS_NAME, 'selector'))
         owned = int(pots.text.split()[-1])
 
         if event_grind is False:

@@ -47,7 +47,7 @@ def pick_fight(driver):
         is_fever_time = False
         print('fever time no')
 
-    opponent_frame = opponent_frames_list.find_elements_by_tag_name('a')[1]
+    opponent_frame = opponent_frames_list.find_elements(By.TAG_NAME, 'a')[1]
     # print(opponent_frame.text)
     driver.execute_script("arguments[0].click();", opponent_frame)
 
@@ -107,11 +107,11 @@ def skip_animation(driver):
     while driver.bot.page() == "/arena/user_confirm":
         time.sleep(1)
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element_by_id("gadget_contents"), 254,
+            driver.find_element(By.ID, "gadget_contents"), 254,
             50).click().perform()
         time.sleep(1)
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element_by_id("gadget_contents"), 700,
+            driver.find_element(By.ID, "gadget_contents"), 700,
             650).click().perform()
 
 
@@ -123,7 +123,7 @@ def get_battle_results(driver):
 
     points_frame = driver.execute_script(
         "return document.querySelector('#scroll_content2');")
-    divs = points_frame.find_elements_by_tag_name('div')
+    divs = points_frame.find_elements(By.TAG_NAME, 'div')
 
     for div in divs:
         driver.execute_script("arguments[0].scrollTop=arguments[1].offsetTop",

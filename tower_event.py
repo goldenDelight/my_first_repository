@@ -20,7 +20,7 @@ def grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_top':
         try:
-            driver.find_element_by_id('canvas').click()
+            driver.find_element(By.ID, 'canvas').click()
 
         except NoSuchElementException:
             try:
@@ -43,7 +43,7 @@ def grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_top':
         try:
-            driver.find_element_by_id('canvas').click()
+            driver.find_element(By.ID, 'canvas').click()
         except NoSuchElementException:
             pass
 
@@ -69,14 +69,14 @@ def grind(driver):
 
     if driver.bot.page() == '/tower/tower_event_result':
         try:
-            driver.find_element_by_id('canvas').click()
+            driver.find_element(By.ID, 'canvas').click()
         except NoSuchElementException:
             try:
                 driver.bot.click('class', 'decision_button_column_1')
             except StaleElementReferenceException:
                 pass
         try:
-            driver.find_element_by_id('canvas').click()
+            driver.find_element(By.ID, 'canvas').click()
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:

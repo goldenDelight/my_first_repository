@@ -39,8 +39,7 @@ def get_partner(driver):
             utilities.my_traceback()
         except AttributeError:
             import startup
-            if driver.find_element_by_id(
-                    'gadget_contents').text == "Request Error(0)":
+            if driver.find_element(By.ID, 'gadget_contents').text == "Request Error(0)":
                 driver.execute_script("gadgets.util.runOnLoadHandlers();")
                 startup.game_start(driver)
 
@@ -76,9 +75,8 @@ def req_assist(driver):
         pass
     except NoSuchElementException:
         # id text is not a typo, literal engrish
-        boss_timer = driver.find_element_by_id('raid_time_rimit')
+        boss_timer = driver.find_element(By.ID, 'raid_time_rimit')
         if boss_timer is not None and boss_timer.is_displayed():
             utilities.print_temp("assist already requested")
-        elif driver.find_element_by_id(
-                'gadget_contents').text == "Request Error(0)":
+        elif driver.find_element(By.ID, 'gadget_contents').text == "Request Error(0)":
             driver.bot.refresh_frame()

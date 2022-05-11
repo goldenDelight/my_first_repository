@@ -66,7 +66,7 @@ def decision_tree(driver):
     if driver.bot.boss_name is None:
         WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
             (By.CLASS_NAME, 'quest_boss_status_1')))
-        status = driver.find_elements_by_class_name('quest_boss_status_1')
+        status = driver.find_elements(By.CLASS_NAME, 'quest_boss_status_1')
 
         if name := status[0].text:
             driver.bot.boss_name = name

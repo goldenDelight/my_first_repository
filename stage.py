@@ -45,7 +45,7 @@ def grind(driver, slayer_event=False):
     global canvas, loading_box, stam_bar, pre_click_stam, current_stam
 
     try:
-        loading_box = driver.find_element_by_id('loadingbox')
+        loading_box = driver.find_element(By.ID, 'loadingbox')
         WebDriverWait(driver, 10).until(ec.staleness_of(loading_box))
     except NoSuchElementException:
         pass
