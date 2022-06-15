@@ -14,6 +14,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
+import vanquish_event
 from custom_exceptions import MaxCardLimitException
 from custom_exceptions import NoProgressException
 from custom_exceptions import NotEnoughStaminaException
@@ -80,8 +81,8 @@ def grind(driver, slayer_event=False):
             if not slayer_event:
                 nav.quest(driver)
             else:
-                nav.event_page(driver)
-                nav.event_stage(driver)
+                vanquish_event.event_page(driver)
+                vanquish_event.event_stage(driver)
 
 
 def click_cycle():
