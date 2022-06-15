@@ -10,6 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import logic
 import nav
 import output
+import startup
 import utilities
 from custom_exceptions import (MaxCardLimitException,
                                ShopBreakException)
@@ -24,9 +25,13 @@ def grind(driver):
         if driver.bot.page() == '/item/item_shop':
             raise ShopBreakException
 
+        elif driver.execute_script("return document.querySelector('#information');") is not None:
+            startup.game_start(driver)
+
         if nav.unclaimed_gifts(driver):
             nav.gifts(driver)
             gifts.get_gifts(driver)
+            return
 
         if nav.battle_page(driver):
             nav.boss_recon(driver)
