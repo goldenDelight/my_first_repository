@@ -1,10 +1,33 @@
 from threading import Thread
+import threading
+import battle_log
+import custom_driver
+import quest
+import vanquish_event
+import nav
+import tower_event
+import utilities
+import output
+import startup
+import gifts
+import logic
+import battle
+import taba_bot
+import discipline_module
+from threading import Thread
+import arena_event
+import custom_exceptions
+from custom_exceptions import ShopBreakException
+from selenium.common.exceptions import (StaleElementReferenceException)
+import selenium
+import sys
 
 from selenium.common.exceptions import (StaleElementReferenceException)
 
 import custom_driver
 import quest
 import tower_event
+import vanquish_event
 from custom_exceptions import ShopBreakException
 
 
@@ -30,6 +53,14 @@ def alt_thread(t_driver):
 if __name__ == '__main__':
 
     driver = custom_driver.CustomDriver()
+
+    t1 = Thread(group=None,
+                target=alt_thread,
+                name=None,
+                args=(driver,),
+                kwargs={},
+                daemon=None)
+    t1.run()
 
     # while True:
     #     try:
