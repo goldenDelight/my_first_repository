@@ -16,6 +16,7 @@ import utilities
 
 def fight(driver, slayer_event=False, full_attack_AR=False):
     """
+    :param full_attack_AR:
     :param driver:
     :param slayer_event:
     """
@@ -29,6 +30,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
         name = WebDriverWait(driver, 3).until(
             ec.visibility_of_element_located((
                 By.CLASS_NAME, 'quest_boss_status_1')))
+
         if (full_attack_AR and "(AR)") or "(Hell)" in name.text:
             if bp < 3:
                 battle.full_attack(driver)
@@ -44,14 +46,15 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
         elif bp < 1:
             battle.weak_attack(driver)
             WebDriverWait(driver, 3).until(
-                ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
+                ec.visibility_of_element_located((
+                    By.ID, 'modal-win-inner')))
+
             utilities.do_bp(driver, slayer_event)
+
             battle.weak_attack(driver)
-            utilities.print_temp("weakly attacking", False)
 
         else:
             battle.weak_attack(driver)
-            utilities.print_temp("weakly attacking", False)
 
     except NoSuchElementException:
         pass
