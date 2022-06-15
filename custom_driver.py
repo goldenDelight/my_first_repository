@@ -32,10 +32,12 @@ test_account = {"email": "sk8pirate24@gmail.com",
 
 
 class CustomDriver(WebDriver):
-    def __init__(self):
+    def __init__(self, account='test_account'):
         super().__init__()
         self.get(
             "https://www.nutaku.net/games/taimanin-asagi-battle-arena/play/")
+
+        account = test_account if 'test' in account else main_account
 
         # startup sequence for game: login, change scope to game_frame, start
 
@@ -44,10 +46,11 @@ class CustomDriver(WebDriver):
         self.ignore = (ElementClickInterceptedException,
                        ElementNotInteractableException,
                        TimeoutException)
-        self.account = main_account
+        self.account = account
 
         try:
-            startup.log_in(self)
+            startup.log_in(self, self.account.get('email'),
+                           self.account.get('password'))
             startup.game_start(self)
         except Exception:
             pass
