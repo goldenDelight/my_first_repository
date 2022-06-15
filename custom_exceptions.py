@@ -27,15 +27,7 @@ class RequestError0(Exception):
 
     def __init__(self):
         super().__init__()
-        print("request error detected")
-
-
-class WtfException(Exception):
-    """Raised when wtf?!"""
-
-    def __init__(self):
-        super().__init__()
-        print("wtf")
+        print("request error detected", end='\n', flush=True)
 
 
 class ShopBreakException(Exception):
