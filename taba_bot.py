@@ -90,8 +90,8 @@ class Bot:
             WebDriverWait(self.driver, 3).until(ec.staleness_of(element))
 
         except NoSuchElementException:
-            if self.driver.find_element(By.ID,
-                    'gadget_contents').text == "Request Error(0)":
+            if self.driver.find_element(
+                    By.ID, 'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
 
         except TimeoutException:
@@ -113,10 +113,13 @@ class Bot:
     def find_substring(self, sub_str, parent=None):
         parent = self.driver if parent is None else parent
         try:
-            WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
-                (By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
-            return parent.find_element(By.XPATH,
-                f"//*[contains(text(), '{sub_str}')]")
+            WebDriverWait(self.driver, 3).until(
+                ec.presence_of_element_located((
+                    By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
+
+            return parent.find_element(
+                By.XPATH, f"//*[contains(text(), '{sub_str}')]")
+
         except TimeoutException:
             return None
 

@@ -33,7 +33,9 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
             if bp < 3:
                 battle.full_attack(driver)
                 WebDriverWait(driver, 3).until(
-                    ec.visibility_of_element_located((By.ID, 'modal-win-inner')))
+                    ec.visibility_of_element_located((
+                        By.ID, 'modal-win-inner')))
+
                 utilities.do_bp(driver, slayer_event)
 
             battle.full_attack(driver)
@@ -46,6 +48,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
             utilities.do_bp(driver, slayer_event)
             battle.weak_attack(driver)
             utilities.print_temp("weakly attacking", False)
+
         else:
             battle.weak_attack(driver)
             utilities.print_temp("weakly attacking", False)
