@@ -3,7 +3,7 @@ class NoProgressException(Exception):
 
     def __init__(self):
         super().__init__()
-        print("no progress exception raised")
+        print("no progress exception raised", end='\r', flush=True)
 
 
 class MaxCardLimitException(Exception):
@@ -11,7 +11,7 @@ class MaxCardLimitException(Exception):
 
     def __init__(self):
         super().__init__()
-        print("max card limit exception raised")
+        print("max card limit exception raised", end='\n', flush=True)
 
 
 class NotEnoughStaminaException(Exception):
@@ -19,7 +19,7 @@ class NotEnoughStaminaException(Exception):
 
     def __init__(self):
         super().__init__()
-        print("not enough stamina exception raised")
+        print("not enough stamina exception raised", end='\r', flush=True)
 
 
 class RequestError0(Exception):
@@ -35,4 +35,4 @@ class ShopBreakException(Exception):
 
     def __init__(self):
         super().__init__()
-        print("well done comrade")
+        print("well done comrade", end='\n', flush=True)
