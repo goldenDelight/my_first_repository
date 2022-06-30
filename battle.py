@@ -79,6 +79,7 @@ def req_assist(driver):
         pass
     except NoSuchElementException:
         utilities.my_traceback()
+        utilities.print_temp("no such element as 'raid_help_button'", False)
         boss_timer = driver.find_element(By.ID, 'raid_time_rimit')
         if boss_timer is not None and boss_timer.is_displayed():
             utilities.print_temp("assist already requested")
