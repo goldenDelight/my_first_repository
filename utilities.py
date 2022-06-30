@@ -115,7 +115,7 @@ def do_bp(driver, event_grind=False):
             #     pots_left = owned_pots - 1
             #     taba_bot.print_temp(f"{pots_left} full bp pots left", False)
             # else:
-                print_temp(f"{owned - 6:,} bp pots left", False)
+                print_temp(f"{owned - 6:,} my_bp pots left", temp=False)
                 driver.bot.click('class', 'decision_button_column_2')
 
         driver.bot.click('class', 'decision_button_column_2')
@@ -133,7 +133,7 @@ def name_is(func):
 
         if f"{time.strftime('%H:%M:%S')} {func.__name__}" != last_message:
             last_message = f"{time.strftime('%H:%M:%S')} {func.__name__}"
-            print(last_message)
+            print(last_message, flush=True)
         return result
 
     return wrap
