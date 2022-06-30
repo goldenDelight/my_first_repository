@@ -32,12 +32,14 @@ def grind(driver):
                     info_text = stage_info[0].text
                     info_lines = info_text.splitlines()
                     points_str = info_lines[2]
-                    points_int: int = points_str.split()[-1]
+                    points_int = int(points_str.split()[-1])
 
                     utilities.print_temp(f"points: {points_int:,}")
 
-                    if points_int >= 8000000:
-                        raise ShopBreakException
+                    # if points_int >= (15 * 1000000):
+                    #     utilities.print_temp(f"\nHit quota!! points: {points_int:,}\n", temp=False)
+                    #     return True
+
             except Exception:
                 pass
 
@@ -92,3 +94,4 @@ def grind(driver):
     elif driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
+    return False
