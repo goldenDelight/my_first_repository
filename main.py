@@ -18,11 +18,10 @@ from threading import Thread
 import arena_event
 import custom_exceptions
 from custom_exceptions import ShopBreakException
-from selenium.common.exceptions import (StaleElementReferenceException)
 import selenium
 import sys
 
-from selenium.common.exceptions import (StaleElementReferenceException)
+from selenium.common.exceptions import StaleElementReferenceException
 
 import custom_driver
 import quest
