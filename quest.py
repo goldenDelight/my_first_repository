@@ -63,10 +63,10 @@ def decision_tree(driver):
     stalls for assist on main page. wait for cooldown - if boss is oni or
     speed but BP cooldown is < 10min, stalls for cooldown on main page fight
     - when BP capped at 6 - BP > 0, boss is oni or speed and cooldown >10min
-    - BP is 0, boss is oni, BP cooldown >10min (uses 1 bp pot)
+    - BP is 0, boss is oni, BP cooldown >10min (uses 1 my_bp pot)
     """
 
-    bp = driver.bot.check_current_bp()
+    bp = driver.bot.my_bp()
 
     if driver.bot.boss_name is None:
         WebDriverWait(driver, 3).until(ec.presence_of_all_elements_located(
@@ -80,7 +80,7 @@ def decision_tree(driver):
     print("the council will decide your fate")
 
     if bp == 6:
-        print("6 bp == fight")
+        print("6 my_bp == fight", flush=True)
         logic.fight(driver)
 
     elif "Red Oni" in driver.bot.boss_name:
@@ -92,11 +92,11 @@ def decision_tree(driver):
 
     elif "Speed Demon" in driver.bot.boss_name:
         if bp_cd := driver.bot.bp_cooldown() <= 10:
-            utilities.print_temp(f"bp cooldown <= 10 min")
+            utilities.print_temp(f"my_bp cooldown <= 10 min")
             time.sleep(60 * bp_cd)
             stall(driver, False)
         else:
-            utilities.print_temp(f"bp cooldown not <= 10 min")
+            utilities.print_temp(f"my_bp cooldown not <= 10 min")
         nav.boss_alert(driver)
         nav.raid_boss_list(driver)
         nav.battle_page(driver)
@@ -123,14 +123,14 @@ def stall(driver, full_restore=False):
     else:
         target_bp = driver.bot.initial_bp + 1
 
-    print(f"starting bp = {driver.bot.check_current_bp()}\n"
-          f"target bp = {target_bp}")
+    print(f"starting my_bp = {driver.bot.my_bp()}", flush=True)
+    print(f"target my_bp = {target_bp}", flush=True)
     utilities.print_temp("starting stall", temp=False)
 
     try:
         while True:
             nav.main_page(driver, force_refresh=True)
-            if driver.bot.check_current_bp() >= target_bp:
+            if driver.bot.my_bp() >= target_bp:
                 break
             elif nav.unclaimed_gifts(driver):
                 utilities.print_temp("got assisted", temp=False)
@@ -140,4 +140,4 @@ def stall(driver, full_restore=False):
     except TypeError:
         driver.bot.refresh_frame()
 
-    driver.done_stalling = (driver.bot.check_current_bp() == target_bp)
+    driver.done_stalling = (driver.bot.my_bp() == target_bp)

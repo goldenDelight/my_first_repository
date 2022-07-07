@@ -152,7 +152,7 @@ class Bot:
             bp_text = self.driver.execute_script(
                 "return document.getElementById('bp_gage_time').innerText")[-2:]
             cd = int(bp_text)
-            print(f"bp cooldown: {cd % 20}")
+            print(f"my_bp cooldown: {cd % 20}")
             return cd % 20
 
         except JavascriptException:
@@ -162,26 +162,13 @@ class Bot:
                     'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
 
-    def check_current_bp(self):
+    def my_bp(self):
         try:
-            if curr_bp := self.driver.execute_script(
-                    "return document.getElementById('top_bp_num').innerText")[0]:
-                return int(curr_bp)
-
-        except JavascriptException:
-            from utilities import my_traceback
-            my_traceback()
-            if self.driver.find_element(By.ID,
-                    'gadget_contents').text == "Request Error(0)":
-                self.refresh_frame()
-            return None
-
-        except WebDriverException:
-            from utilities import my_traceback, print_temp
-
-            my_traceback()
-            print_temp(
-                "Unable to get 'innerText' of undefined or null ref.", False)
+            if bp := self.driver.execute_script(
+                    "return document.querySelector('#top_bp_num');").text[0]:
+                return int(bp)
+        except Exception:
+            self.refresh_frame()
 
     def refresh_frame(self):
         self.driver.execute_script("gadgets.util.runOnLoadHandlers();")
