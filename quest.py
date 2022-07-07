@@ -53,7 +53,7 @@ def grind(driver):
         driver.bot.refocus_frame()
 
 
-# decides: fight now, stall for assist, or stall for bp
+# decides: fight now, stall for assist, or stall for my_bp
 def decision_tree(driver):
     """
     :param driver: :return N/A: Called when driver reaches boss battle page,
@@ -77,7 +77,7 @@ def decision_tree(driver):
             driver.bot.boss_name = name
             output.boss_counter(driver.bot)
 
-    utilities.print_temp("the council will decide your fate")
+    print("the council will decide your fate")
 
     if bp == 6:
         print("6 bp == fight")
@@ -91,7 +91,6 @@ def decision_tree(driver):
         logic.fight(driver)
 
     elif "Speed Demon" in driver.bot.boss_name:
-        utilities.print_temp(f"speed demon in boss name is True")
         if bp_cd := driver.bot.bp_cooldown() <= 10:
             utilities.print_temp(f"bp cooldown <= 10 min")
             time.sleep(60 * bp_cd)

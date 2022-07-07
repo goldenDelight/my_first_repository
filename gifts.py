@@ -25,10 +25,6 @@ def claim_all(driver):
     except Exception: pass
 
 
-def full_inventory(driver):
-    return driver.bot.find_substring("You have unclaimed_gifts gifts.") is None
-
-
 def get_gifts(driver):
     driver.bot.click('class', 'decision_button_column_1')
     driver.bot.click('class', 'back_button_column_1')
