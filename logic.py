@@ -8,7 +8,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
-
+import battle_log
 import battle
 import nav
 import utilities
@@ -59,9 +59,12 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
         pass
     except TimeoutException:
         try:
-            driver.bot.find(
-                "css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
-        except AttributeError:
+            css = "a.closePopup:nth-child(6) > div:nth-child(1)"
+            element = WebDriverWait(driver, 5).until(
+                ec.element_to_be_clickable((By.CSS_SELECTOR, css)))
+
+            element.click()
+        except TimeoutException:
             return
 
     except (WebDriverException,
@@ -78,8 +81,14 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
                 nav.defeat_retry(driver)
                 fight(driver, slayer_event)
         else:
-            driver.bot.wait_for('id', 'canvas_box')
-            driver.bot.wait_for('id', 'canvas')
+            try:
+                WebDriverWait(driver, 3).until(
+                    ec.element_to_be_clickable((By.ID, 'canvas_box')))
+
+            except TimeoutException:
+                WebDriverWait(driver, 3).until(
+                    ec.element_to_be_clickable((By.ID, 'canvas')))
+
             driver.execute_script("gadgets.util.runOnLoadHandlers();")
             startup.game_start(driver)
 
