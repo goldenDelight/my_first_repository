@@ -154,6 +154,7 @@ class Bot:
             cd = int(bp_text)
             print(f"bp cooldown: {cd % 20}")
             return cd % 20
+
         except JavascriptException:
             from utilities import my_traceback
             my_traceback()
