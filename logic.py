@@ -50,7 +50,6 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
                     By.ID, 'modal-win-inner')))
 
             utilities.do_bp(driver, slayer_event)
-
             battle.weak_attack(driver)
 
         else:
@@ -64,6 +63,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
                 "css", "a.closePopup:nth-child(6) > div:nth-child(1)").click()
         except AttributeError:
             return
+
     except (WebDriverException,
             JavascriptException,
             AttributeError):
@@ -72,9 +72,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
     finally:
         if slayer_event:
             skip_animation(driver)
-
-            import battle_log
-            battle_log.track_slayer_battle(driver)
+            # battle_log.track_slayer_battle(driver)
 
             if driver.bot.page() == '/raid/boss_fail/':
                 nav.defeat_retry(driver)
