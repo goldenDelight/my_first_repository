@@ -2,7 +2,7 @@ from selenium.common.exceptions import (
     TimeoutException,
     WebDriverException,
     JavascriptException,
-    NoSuchElementException)
+    NoSuchElementException, ElementClickInterceptedException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -30,7 +30,7 @@ def get_partner(driver):
         partner_frame.click()
         return True
 
-    except TimeoutException:
+    except (TimeoutException, ElementClickInterceptedException):
 
         try:
             partner_frame = driver.execute_script(

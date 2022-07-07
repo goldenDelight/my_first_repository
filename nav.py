@@ -128,6 +128,7 @@ def raid_boss_list(driver):
         main_page(driver)
         driver.bot.click('id', 'boss_alerts_1')
     except NoSuchElementException:
+
         return False
 
     return driver.bot.page() == '/raid/raid_index'

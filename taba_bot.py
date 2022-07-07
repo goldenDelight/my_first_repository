@@ -90,9 +90,10 @@ class Bot:
             WebDriverWait(self.driver, 3).until(ec.staleness_of(element))
 
         except NoSuchElementException:
-            if self.driver.find_element(
-                    By.ID, 'gadget_contents').text == "Request Error(0)":
-                self.refresh_frame()
+            # my_traceback()
+            # if self.driver.find_element(
+            #         By.ID, 'gadget_contents').text == "Request Error(0)":
+            self.refresh_frame()
 
         except TimeoutException:
             from utilities import print_temp
@@ -101,10 +102,12 @@ class Bot:
         return None
 
     def find_href(self, substring):
-        WebDriverWait(self.driver, 3).until(
-            ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
+        self.refocus_frame()
+        anchors = WebDriverWait(self.driver, 4).until(
+            ec.presence_of_all_elements_located((By.TAG_NAME, "a")))
 
-        anchors = self.driver.execute_script(f"return document.querySelectorAll('a')")
+        # anchors = self.driver.execute_script(
+        #     "return document.querySelectorAll('a')")
 
         for a in anchors:
             if substring in str(a.get_attribute('href')):
@@ -189,25 +192,3 @@ class Bot:
         self.driver.switch_to.parent_frame()
         WebDriverWait(self.driver, 10).until(
             ec.frame_to_be_available_and_switch_to_it((By.ID, 'game_frame')))
-
-    def find(self, search_type, search_value, parent=None):
-        locator = search_syntax_dic.get(search_type)
-        element = self.search_cycle(locator, search_value, parent)
-        return element
-
-    def wait_for(self, locator, value, t=5, parent=None):
-        locator = search_syntax_dic.get(locator)
-        parent = self.driver if parent is None else parent
-        element = None
-
-        try:
-            element = WebDriverWait(parent, t).until(
-                ec.element_to_be_clickable((locator, value)))
-        except TimeoutException:
-            try:
-                element = WebDriverWait(parent, t).until(
-                    ec.visibility_of_element_located((locator, value)))
-            except TimeoutException:
-                pass
-
-        return element
