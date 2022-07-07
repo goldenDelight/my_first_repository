@@ -113,40 +113,6 @@ class Bot:
             if substring in str(a.get_attribute('href')):
                 return a
 
-    def find_substring(self, sub_str, parent=None):
-        parent = self.driver if parent is None else parent
-        try:
-            WebDriverWait(self.driver, 3).until(
-                ec.presence_of_element_located((
-                    By.XPATH, f"//*[contains(text(), '{sub_str}')]")))
-
-            return parent.find_element(
-                By.XPATH, f"//*[contains(text(), '{sub_str}')]")
-
-        except TimeoutException:
-            return None
-
-    def search_cycle(self, locator, value=None, parent=None):
-        import time
-        parent = self.driver if parent is None else parent
-        for i in range(15):
-            try:
-                if value is None:
-                    return self.driver.execute_script(locator)
-                else:
-                    parent.find_element(locator, value)
-            except NoSuchElementException:
-                pass
-            except UnexpectedAlertPresentException:
-                pass
-            except JavascriptException:
-                pass
-            except StaleElementReferenceException:
-                print("stale element reference exception")
-
-            time.sleep(0.1)
-        return None
-
     def bp_cooldown(self):
         try:
             bp_text = self.driver.execute_script(
