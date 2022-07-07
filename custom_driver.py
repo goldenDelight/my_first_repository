@@ -1,10 +1,8 @@
-from selenium.common.exceptions import (
-    TimeoutException,
-    ElementClickInterceptedException,
-    ElementNotInteractableException)
+from selenium.common.exceptions import ElementClickInterceptedException, \
+    StaleElementReferenceException
+from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.webdriver import WebDriver
-# from seleniumwire import webdriver
-
 import arena_event
 import battle
 import battle_log
