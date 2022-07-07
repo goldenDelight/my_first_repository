@@ -80,6 +80,8 @@ def use_stam(driver, tower_event=False):
         driver.execute_script("arguments[0].click();", confirm)
     except TimeoutException:
         my_traceback()
+    except StaleElementReferenceException:
+        use_stam(driver, tower_event)
 
     try:
         driver.bot.click('class', 'back_button_column_1')
