@@ -1,12 +1,12 @@
 import re
 import time
-
+from utilities import print_temp, my_traceback
+import startup
 from selenium.common.exceptions import (
     TimeoutException,
     NoSuchElementException,
-    UnexpectedAlertPresentException,
     JavascriptException,
-    StaleElementReferenceException, WebDriverException)
+    WebDriverException)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -60,7 +60,6 @@ class Bot:
     def page(self):
         try:
             page = self.driver.execute_script("return location_url")
-            # print(f"u at {page} bitch")
             return page
 
         except JavascriptException:
@@ -96,7 +95,6 @@ class Bot:
             self.refresh_frame()
 
         except TimeoutException:
-            from utilities import print_temp
             print_temp("element not stale")
 
         return None
@@ -122,10 +120,9 @@ class Bot:
             return cd % 20
 
         except JavascriptException:
-            from utilities import my_traceback
             my_traceback()
-            if self.driver.find_element(By.ID,
-                    'gadget_contents').text == "Request Error(0)":
+            if self.driver.find_element(
+                    By.ID, 'gadget_contents').text == "Request Error(0)":
                 self.refresh_frame()
 
     def my_bp(self):
@@ -138,7 +135,6 @@ class Bot:
 
     def refresh_frame(self):
         self.driver.execute_script("gadgets.util.runOnLoadHandlers();")
-        import startup
         startup.game_start(self.driver)
         return None
 
