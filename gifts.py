@@ -33,7 +33,7 @@ def get_gifts(driver):
     driver.bot.click('class', 'decision_button_column_1')
     driver.bot.click('class', 'back_button_column_1')
     driver.bot.boss_name = None
-    print("driver.bot.boss_name = None")
+    print("driver.bot.boss_name = None", end="\r", flush=True)
 
 # event rank elements
 #

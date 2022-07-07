@@ -194,7 +194,7 @@ def unclaimed_gifts(driver):
         icon_url = gifts_button.get_attribute('style').split('"')[1]
         return 'present_2' in icon_url
     except NoSuchElementException:
-        print("no such gift button exception")
+        print("no such gift button exception", flush=True)
     except AttributeError:
         utilities.my_traceback()
     except StaleElementReferenceException:

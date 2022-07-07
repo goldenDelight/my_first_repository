@@ -46,7 +46,7 @@ def alt_thread(t_driver):
         except ShopBreakException:
             break
 
-    print("DONE WITH GRINDING THREADS THANKS YOU GOODBYE NOW ;)")
+    print("DONE WITH GRINDING THREADS THANKS YOU GOODBYE NOW ;)", flush=True)
 
 
 # Press the green button in the gutter to run the script.
