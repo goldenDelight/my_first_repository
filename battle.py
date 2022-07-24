@@ -21,6 +21,8 @@ def start_battle(driver):
         return False
 
 
+# TODO:
+#  add page check to confirm location to prevent looping while on stage
 def get_partner(driver):
     try:
         partner_frame = WebDriverWait(driver, 5).until(

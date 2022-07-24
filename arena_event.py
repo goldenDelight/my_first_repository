@@ -1,7 +1,7 @@
 import time
 
 from selenium.common.exceptions import (
-    TimeoutException)
+    TimeoutException, JavascriptException, NoSuchElementException)
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -21,6 +21,7 @@ import utilities
 #  avoid opponents I've lost to
 #  check for rank-up battle availability
 #  check/change decks based on fever/rank-up
+from custom_exceptions import ShopBreakException
 
 
 def grind(driver):
@@ -99,9 +100,13 @@ def normal_attack(driver):
             ec.visibility_of_element_located((By.ID, "modal-win-inner")))
         utilities.do_bp(driver, event_grind=True)
 
-    normal_attack_btn = driver.execute_script(
-        "return document.querySelector('#quest_attack_2');")
-    driver.execute_script("arguments[0].click();", normal_attack_btn)
+    try:
+        normal_attack_btn = driver.execute_script(
+            "return document.querySelector('#quest_attack_2');")
+        driver.execute_script("arguments[0].click();", normal_attack_btn)
+    except JavascriptException:
+        WebDriverWait(driver, 4).until(
+            ec.element_to_be_clickable((By.ID, "quest_attack_2"))).click()
 
 
 def skip_animation(driver):

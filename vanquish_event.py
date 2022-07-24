@@ -16,6 +16,7 @@ from custom_exceptions import \
 
 
 full_attack_AR = False
+current_points = 0
 
 
 def nav_to_event_splash(driver):
@@ -42,6 +43,7 @@ def nav_to_stage(driver):
         driver.execute_script("arguments[0].click();", ref)
 
 
+
 def grind(driver):
     driver.bot.refocus_frame()
 
@@ -53,7 +55,7 @@ def grind(driver):
         except AttributeError:
             try:
                 href = driver.bot.find_href('hunt_start')
-                href.click()
+                driver.execute_script("arguments[0].click();", href)
             except AttributeError:
                 nav.main_page(driver)
     try:
@@ -76,7 +78,7 @@ def grind(driver):
                         full_attack_AR=full_attack_AR)
             nav.battle_to_event_stage(driver)
 
-        elif 'raid_list' in driver.bot.page():
+        elif 'list' in driver.bot.page():
             if nav.battle_page(driver, slayer_event=True):
                 logic.fight(driver,
                             slayer_event=True,

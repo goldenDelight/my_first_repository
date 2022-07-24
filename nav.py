@@ -67,11 +67,8 @@ def battle_to_event_stage(driver):
         total_points = int(total_points)
         print(f"total event points: {total_points:,}\n")
 
-        if total_points > 20500000:
-            raise ShopBreakException
-
-    result = driver.find_element_by_id('hunt_result')
-    close = result.find_element_by_class_name('closePopup')
+    result = driver.find_element(By.ID, 'hunt_result')
+    close = result.find_element(By.CLASS_NAME, 'closePopup')
     driver.execute_script("arguments[0].click();", close)
 
     WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located(
@@ -113,8 +110,7 @@ def quest_to_boss_list(driver, slayer_event=False):
     if slayer_event or driver.bot.page() == '/quest/quest_start':
         cvs = driver.find_element(By.ID, 'canvas')
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element_by_id(
-                'gadget_contents'), 200, 300).click().perform()
+            driver.find_element(By.ID, 'gadget_contents'), 200, 300).click().perform()
         WebDriverWait(driver, 3).until(ec.staleness_of(cvs))
 
 
