@@ -63,11 +63,11 @@ def use_stam(driver, tower_event=False):
     try:
         WebDriverWait(driver, 3).until(
             ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
-        use_pots = driver.execute_script(
+        use_pots = lambda driver: driver.execute_script(
             "return document.querySelector('a[href*=use_confirm]')")
         time.sleep(0.5)
-        driver.execute_script("arguments[0].click();", use_pots)
-        WebDriverWait(driver, 3).until(ec.staleness_of(use_pots))
+        driver.execute_script("arguments[0].click();", use_pots(driver))
+        # WebDriverWait(driver, 3).until(ec.staleness_of(pot))
     except TimeoutException:
         my_traceback()
     time.sleep(0.5)
@@ -75,9 +75,9 @@ def use_stam(driver, tower_event=False):
     try:
         WebDriverWait(driver, 3).until(
             ec.presence_of_all_elements_located((By.TAG_NAME, 'a')))
-        confirm = driver.execute_script(
+        confirm = lambda driver: driver.execute_script(
             "return document.querySelector('a[href*=use_action]')")
-        driver.execute_script("arguments[0].click();", confirm)
+        driver.execute_script("arguments[0].click();", confirm(driver))
     except TimeoutException:
         my_traceback()
     except StaleElementReferenceException:
@@ -117,7 +117,7 @@ def do_bp(driver, event_grind=False):
             #     pots_left = owned_pots - 1
             #     taba_bot.print_temp(f"{pots_left} full bp pots left", False)
             # else:
-                print_temp(f"{owned - 6:,} my_bp pots left", temp=False)
+            #     print_temp(f"{owned - 6:,} my_bp pots left", temp=False)
                 driver.bot.click('class', 'decision_button_column_2')
 
         driver.bot.click('class', 'decision_button_column_2')
