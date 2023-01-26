@@ -129,30 +129,6 @@ def check_for_boss(driver):
         return False
 
 
-def battle_to_event_stage(driver):
-
-    WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
-        (By.ID, 'hunt_result')))
-
-    current_points = int(driver.execute_script("return app.tower.data.extra_pt"))
-
-    if current_points is not None:
-        print(f"total event points: {current_points:,}\n")
-
-    result = driver.find_element(By.ID, 'hunt_result')
-    close = result.find_element(By.CLASS_NAME, 'closePopup')
-    driver.execute_script("arguments[0].click();", close)
-
-    WebDriverWait(driver, 5).until(ec.presence_of_all_elements_located(
-        (By.TAG_NAME, 'a')))
-
-    hunt = driver.execute_script(
-        "return document.querySelector('a[href*=hunt_start]');")
-
-    driver.execute_script("arguments[0].click();", hunt)
-    WebDriverWait(driver, 5).until(ec.staleness_of(hunt))
-
-
 def event_stage(driver):
     ref = driver.bot.find_href('hunt_start')
     driver.execute_script("arguments[0].click();", ref)
