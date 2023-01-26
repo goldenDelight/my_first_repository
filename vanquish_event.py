@@ -17,39 +17,12 @@ from custom_exceptions import \
 
 vanquish_points_goal = 200000000
 full_attack_AR = False
-current_points = 0
-
-
-def nav_to_event_splash(driver):
-    if 'hunt_event_top' not in driver.bot.page():
-        ref = driver.bot.find_href('hunt_event_top')
-        driver.execute_script("arguments[0].click();", ref)
-
-
-def nav_to_boss_list(driver):
-    if 'raid_list' not in driver.bot.page():
-        ref = driver.bot.find_href('raid_list')
-        driver.execute_script("arguments[0].click();", ref)
-
-
-def nav_to_boss(driver):
-    if 'boss_arrival' not in driver.bot.page():
-        ref = driver.bot.find_href('boss_arrival')
-        driver.execute_script("arguments[0].click();", ref)
-
-
-def nav_to_stage(driver):
-    if 'hunt_start' not in driver.bot.page():
-        ref = driver.bot.find_href('hunt_start')
-        driver.execute_script("arguments[0].click();", ref)
 
 
 # TODO: change click method to javascript click to avoid 'click intercepted'
 #  exceptions when a popup is displayed
 
-def run_event():
-    global current_points
-    global vanquish_points_goal
+def run_event(driver):
 
     # return current_points < vanquish_points_goal
     return True
@@ -67,10 +40,10 @@ def grind(driver):
             try:
                 href = driver.bot.find_href('hunt_start')
                 driver.execute_script("arguments[0].click();", href)
-            except AttributeError:
-                nav.main_page(driver)
-    try:
+            except JavascriptException:
+                pass
 
+    try:
         if 'item_shop' in driver.bot.page():
             raise ShopBreakException
 
@@ -157,8 +130,6 @@ def check_for_boss(driver):
 
 
 def battle_to_event_stage(driver):
-    global vanquish_points_goal
-    global current_points
 
     WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
         (By.ID, 'hunt_result')))
@@ -167,9 +138,6 @@ def battle_to_event_stage(driver):
 
     if current_points is not None:
         print(f"total event points: {current_points:,}\n")
-
-        if current_points > vanquish_points_goal:
-            raise ShopBreakException
 
     result = driver.find_element(By.ID, 'hunt_result')
     close = result.find_element(By.CLASS_NAME, 'closePopup')
