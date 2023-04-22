@@ -109,8 +109,9 @@ def battle_page(driver, slayer_event=False):
 def quest_to_boss_list(driver, slayer_event=False):
     if slayer_event or driver.bot.page() == '/quest/quest_start':
         cvs = driver.find_element(By.ID, 'canvas')
+
         ActionChains(driver).move_to_element_with_offset(
-            driver.find_element(By.ID, 'gadget_contents'), 200, 300).click().perform()
+            driver.find_element(By.ID, 'gadget_contents'), -275, -100).click().perform()
         WebDriverWait(driver, 3).until(ec.staleness_of(cvs))
 
 

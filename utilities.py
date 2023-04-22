@@ -36,17 +36,33 @@ def sell_cards(driver):
     bulk = driver.find_element(By.ID, 'button_bulk')
     driver.execute_script("arguments[0].click();", bulk)
 
+    # keep_xp_cards(driver)
+
+    driver.bot.click('id', 'button_sell_confirm')
+    driver.bot.click('id', 'button_sell_result')
+
+    nav.main_page(driver)
+
+
+def keep_xp_cards(driver):
+    """
+    Depreciated because slow as fuck and I can't be bothered to min/max anymore
+
+    creates an array composed of all the card elements in the 'sell' window. It
+    then iterates through the array checking if the cards 'jpeg' property
+    matches the XP card's jpeg hardcoded into this function. If it matches, the
+    card element is clicked using a javascript. If a card is clicked, the array
+    becomes stale and is recreated for iteration. When no xp cards found in the
+    array, a flag is raised, breaking the loop and proceeding with the sale.
+    :param driver:
+    :return: None
+    """
     while xp_cards := [card.find_element(By.ID, 'material_card_close')
                        for card
                        in driver.execute_script("return document.querySelectorAll('[id^=showcase_frame_]');")
                        if card.find_element(By.ID, 'material_card_image').get_attribute('src') == xp]:
 
         driver.execute_script('arguments[0].click();', xp_cards.pop())
-
-    driver.bot.click('id', 'button_sell_confirm')
-    driver.bot.click('id', 'button_sell_result')
-
-    nav.main_page(driver)
 
 
 def use_stam(driver, tower_event=False):
@@ -68,8 +84,9 @@ def use_stam(driver, tower_event=False):
         time.sleep(0.5)
         driver.execute_script("arguments[0].click();", use_pots(driver))
         # WebDriverWait(driver, 3).until(ec.staleness_of(pot))
-    except TimeoutException:
-        my_traceback()
+    except:
+        pass
+        # my_traceback()
     time.sleep(0.5)
     time.sleep(1.5)
     try:
