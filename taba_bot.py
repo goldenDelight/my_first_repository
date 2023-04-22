@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-search_syntax_dic = {
+element_type_dic = {
     'css': By.CSS_SELECTOR,
     'xpath': By.XPATH,
     'id': By.ID,
@@ -74,17 +74,27 @@ class Bot:
     #         self.driver.starting_bp_pots_count = count
     #     return None
 
-    def click(self, search_key, search_value):
+    def click(self, element_type, search_value):
+        """
+        Redundant, needs updating. a convenience function I made to find
+        web elements of any class from a single function. Selenium 4 has made
+        this the standard syntax
+
+        :param element_type: key to retrieve 'By' class from element_type_dic
+        :param search_value: identifier of web element to return
+        :return: None
+        """
         try:
             WebDriverWait(self.driver, 3).until(
                 ec.element_to_be_clickable(
-                    (search_syntax_dic.get(search_key), search_value)))
+                    (element_type_dic.get(element_type), search_value)))
         except TimeoutException:
             pass
 
         try:
-            get = find_syntax_dic.get(search_key)
-            element = get(self.driver, search_value)
+            web_element_type = find_syntax_dic.get(element_type)
+            element = self.driver.find_element(element_type_dic.get(element_type),
+                                               value=search_value)
             self.driver.execute_script("arguments[0].click();", element)
             WebDriverWait(self.driver, 3).until(ec.staleness_of(element))
 
