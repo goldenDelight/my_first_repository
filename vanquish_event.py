@@ -15,7 +15,7 @@ from custom_exceptions import \
     RequestError0, \
     ShopBreakException
 
-vanquish_points_goal = 200000000
+vanquish_points_goal = 5000000
 full_attack_AR = False
 
 
@@ -24,7 +24,7 @@ full_attack_AR = False
 
 def run_event(driver):
 
-    # return current_points < vanquish_points_goal
+    # return driver.bot.current_points < vanquish_points_goal
     return True
 
 
@@ -49,8 +49,8 @@ def grind(driver):
 
         if 'boss_arrival' in driver.bot.page():
             logic.fight(driver,
-                        slayer_event=True,
-                        full_attack_AR=full_attack_AR)
+                        slayer_event=True)#,
+                       # full_attack_AR=full_attack_AR)
             nav.battle_to_event_stage(driver)
 
         elif 'hunt_start' in driver.bot.page():
