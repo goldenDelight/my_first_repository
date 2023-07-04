@@ -74,7 +74,7 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
 
     finally:
         if slayer_event:
-            skip_animation(driver)
+            skip_animation(driver, battle_page="/raid/boss_bp")
             # battle_log.track_slayer_battle(driver)
 
             if driver.bot.page() == '/raid/boss_fail/':
@@ -93,18 +93,22 @@ def fight(driver, slayer_event=False, full_attack_AR=False):
             startup.game_start(driver)
 
 
-def skip_animation(driver):
+def skip_animation(driver, battle_page):
     """
     Skips do_battle cinematic. Loop of action-chain clicks at hardcoded
     coordinates of 'skip' button hidden under canvas. The loop breaks if
     canvas returns as None, or after 3s.
     """
 
-    while driver.bot.page() == '/raid/boss_bp':
+    while driver.bot.page() == battle_page:
         try:
-            ActionChains(driver).move_to_element_with_offset(
-                driver.find_element_by_id(
-                    'gadget_contents'), 254, 50).click().perform()
+            driver.bot.refocus_frame()
+            gc = driver.find_element(By.ID, 'gadget_contents')
+            ActionChains(driver) \
+                .move_to_element(gc) \
+                .move_by_offset(-250, -290) \
+                .click() \
+                .perform()
         except NoSuchElementException:
             pass
         except (TimeoutException,

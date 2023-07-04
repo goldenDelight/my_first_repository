@@ -76,7 +76,7 @@ class Bot:
 
     def click(self, element_type, search_value):
         """
-        Redundant, needs updating. a convenience function I made to find
+        Depreciated. A convenience function I made to find
         web elements of any class from a single function. Selenium 4 has made
         this the standard syntax
 
