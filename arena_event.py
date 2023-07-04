@@ -9,6 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import nav
 import utilities
+import logic
 
 # TODO:
 #  reformat summaries
@@ -24,7 +25,7 @@ import utilities
 from custom_exceptions import ShopBreakException
 
 shit_list = {}
-event_points = 0
+event_points: int = 0
 fight_count = 0
 loss_count = 0
 op_name = None
@@ -33,7 +34,10 @@ global pts
 
 def grind(driver):
 
-    if event_points > 1000000:
+    if event_points > 2000000:
+        raise ShopBreakException
+
+    if driver.bot.page() == '/item/item_shop':
         raise ShopBreakException
 
     fever = False
@@ -53,7 +57,7 @@ def grind(driver):
         fever = True
 
     pick_fight(driver, fever)
-    skip_animation(driver)
+    logic.skip_animation(driver, battle_page="/arena/user_confirm")
     get_battle_results(driver)
     nav.arena(driver)
 
